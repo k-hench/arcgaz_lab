@@ -1,0 +1,50 @@
+project:
+  type: book
+  output-dir: docs/
+
+engine: knitr
+
+book:
+  title: "Antarctic Fur Seal Genetic Load"
+  author: "Kosmas Hench"
+  date: "2022-08-12"
+  chapters:
+    - index.qmd
+    - qmd/references.qmd
+  navbar:
+    search: true
+    right:
+      - icon: file-earmark
+        href: https://github.com/
+      - icon: github
+        href: https://github.com/k-hench/arcgaz_gl/
+  favicon: img/arcgaz_plain.svg
+bibliography: references.bib
+
+from: markdown+emoji
+
+format:
+  html:
+    theme:
+    - simplex
+    - styles.scss
+    code-fold: true
+    code-summary: "toggle code"
+    mainfont: "'TeX Gyre Pagella', 'Crimson Text', 'Noto Serif', serif"
+    monofont: "'Fira Code', 'Ubuntu mono', monospace"
+  pdf:
+    documentclass: scrreprt
+
+execute:
+  message: false
+  warning: false
+
+crossref:
+  fig-title: Figure     # (default is "Figure")
+  fig-prefix: Fig   # (default is "fig.")
+  tbl-title: Table     # (default is "Table")
+  tbl-prefix: Tab    # (default is "tbl.")
+  eq-title: Equation     # (default is "Table")
+  eq-prefix: eq    # (default is "tbl.")
+
+highlight-style: printing # zenburn
