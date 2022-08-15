@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.9.238">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Antarctic Fur Seal Genetic Load - 1&nbsp; Sample selection</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="../site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../qmd/references.html" rel="next">
+  <link href="../index.html" rel="prev">
+  <link href="../img/arcgaz_plain.svg" rel="icon" type="image/svg+xml">
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "navbar",
+    "copy-button": false,
+    "collapse-after": 3,
+    "panel-placement": "end",
+    "type": "overlay",
+    "limit": 20,
+    "language": {
+      "search-no-results-text": "No results",
+      "search-matching-documents-text": "matching documents",
+      "search-copy-link-title": "Copy link to search",
+      "search-hide-matches-text": "Hide additional matches",
+      "search-more-match-text": "more match in this document",
+      "search-more-matches-text": "more matches in this document",
+      "search-clear-button-title": "Clear",
+      "search-detached-cancel-button-title": "Cancel",
+      "search-submit-button-title": "Submit"
+    }
+  }</script>
+  <script src="../site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+  <script src="../site_libs/jquery-3.5.1/jquery.min.js"></script>
+  <link href="../site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+  <script src="../site_libs/datatables-binding-0.17/datatables.js"></script>
+  <link href="../site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="../site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet">
+  <script src="../site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+  <link href="../site_libs/dt-ext-buttons-1.10.20/css/buttons.dataTables.min.css" rel="stylesheet">
+  <script src="../site_libs/dt-ext-buttons-1.10.20/js/dataTables.buttons.min.js"></script>
+  <script src="../site_libs/dt-ext-buttons-1.10.20/js/buttons.html5.min.js"></script>
+  <script src="../site_libs/dt-ext-buttons-1.10.20/js/buttons.colVis.min.js"></script>
+  <script src="../site_libs/dt-ext-buttons-1.10.20/js/buttons.print.min.js"></script>
+  <link href="../site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+  <script src="../site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body class="floating nav-fixed">
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Antarctic Fur Seal Genetic Load</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-file-earmark" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/k-hench/arcgaz_gl/"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Sample selection</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../qmd/01_sample_selection.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Sample selection</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../qmd/references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+<header id="title-block-header" class="quarto-title-block default">
+
+<div class="quarto-title"><h1 class="title d-none d-lg-block display-7"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Sample selection</span></h1></div></header>
+<p>Read in Annekes cleaned sample list. Then, give an overview of the available samples over the years, stratified by recruitment success and SNP genotype availability.</p>
+<div class="cell" data-figure-width="7">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="fu">here</span>(<span class="st">"../import_anneke/data/processed/Unique_filtered_dataset_2022.xlsx"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(PupTissueID, uniqueID_pup, PupBirthyear, status, PupSex, pup_SNPed, Beach) <span class="sc">|&gt;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Beach <span class="sc">==</span> <span class="st">"SSB"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>         PupSex <span class="sc">==</span> <span class="st">"F"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span><span class="fu">is.na</span>(PupBirthyear))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># data |&gt; </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   group_by(uniqueID_pup) |&gt; </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   count() |&gt; arrange(-n) </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  # group_by(n) |&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  # count()</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(uniqueID_pup)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">2</span>, <span class="at">linetype =</span> <span class="dv">3</span> ) <span class="sc">+</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> PupBirthyear, <span class="at">y =</span> n, <span class="at">fill =</span> status),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="fu">position_dodge2</span>(<span class="at">width =</span> <span class="fl">0.9</span>, <span class="at">preserve =</span> <span class="st">"single"</span>),</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(pup_SNPed <span class="sc">~</span> .,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller =</span> label_both,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">switch =</span> <span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">size =</span> .<span class="dv">2</span>),</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"pt"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="01_sample_selection_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>For each year, two samples are randomly chosen per recruitment status. Try to use only SNPed samples, if necessary fill up to two samples where possible (if only one sample is available, pick this one).</p>
+<div class="cell">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_selction <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(uniqueID_pup),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>         PupSex <span class="sc">==</span> <span class="st">"F"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>         status <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Recruited"</span>, <span class="st">"NonRecruited"</span>) ) <span class="sc">|&gt;</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">selector =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())) <span class="sc">|&gt;</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(selector <span class="sc">&lt;=</span> <span class="dv">2</span>) <span class="sc">|&gt;</span>            <span class="co"># slice_sample(n = 2) cant subset for years with only one sample </span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status) <span class="sc">|&gt;</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">priority =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(priority <span class="sc">&lt;=</span> <span class="dv">2</span>)                <span class="co"># if possible, use SNPed samples, fill up if necessary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Looking up available alternative tissue samples for the selected individuals.</p>
+<div class="cell">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect alternative tissue IDs</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>uniqueIDs <span class="ot">&lt;-</span> openxlsx<span class="sc">::</span><span class="fu">read.xlsx</span>(<span class="fu">here</span>(<span class="st">"../import_anneke/data/processed/all_msat_genotypes_uniqueID.xlsx"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(dummyID, PlateNumber, uniqueID) <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>dummyID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGP08134"</span>, <span class="st">"AGP18084"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(uniqueID = if_else(dummyID %in% c("AGP08134", "AGP18084"),  NA_character_ , uniqueID),   # annekes approach, keeps NA, NA row</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#        dummyID = if_else(dummyID %in% c("AGP08134", "AGP18084"),  NA_character_ , dummyID)) |&gt;  # ...134/139 match, genetic mother mismatch for ...84</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>PlateNumber) <span class="sc">|&gt;</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge IDs with list of remaining individuals</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>tissue_options <span class="ot">&lt;-</span> data_selction <span class="sc">|&gt;</span> </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(uniqueIDs, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"uniqueID_pup"</span> <span class="ot">=</span> <span class="st">"uniqueID"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">`</span><span class="at">AltTissueID</span><span class="st">`</span><span class="ot">=</span> dummyID )</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Check duplicates (ie alternative IDs)</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># tissue_options %&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(uniqueID_pup %in% unique(.[["uniqueID_pup"]][duplicated(.[["uniqueID_pup"]])]))</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>all_duplicated <span class="ot">&lt;-</span> \(x){</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">duplicated</span>(x) <span class="sc">|</span> <span class="fu">duplicated</span>(x, <span class="at">fromLast =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>tissue_options <span class="sc">%&gt;%</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AltTissueID =</span> <span class="fu">ifelse</span>(AltTissueID<span class="sc">==</span>PupTissueID, <span class="cn">NA</span>, AltTissueID)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(uniqueID_pup) <span class="sc">%&gt;%</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(AltTissueID) <span class="sc">%&gt;%</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">numbering =</span> <span class="fu">paste0</span>(<span class="st">"AltTissueID_"</span>, <span class="fu">row_number</span>())) <span class="sc">%&gt;%</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> PupTissueID<span class="sc">:</span>Beach,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="st">"numbering"</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">"AltTissueID"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(uniqueID_pup<span class="sc">:</span>Beach, <span class="fu">everything</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PupBirthyear)  <span class="sc">|&gt;</span> </span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>(<span class="at">extensions =</span> <span class="st">'Buttons'</span>,</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>            <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'Blfrtip'</span>,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>                           <span class="at">buttons =</span> <span class="fu">c</span>(<span class="st">'copy'</span>, <span class="st">'csv'</span>),</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pageLength =</span> <span class="dv">10</span>), </span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">rownames =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">class =</span> <span class="st">'cell-border stripe'</span>) <span class="sc">|&gt;</span>  </span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatStyle</span>(<span class="at">columns =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>              <span class="at">fontSize =</span> <span class="st">'75%'</span>,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>              <span class="at">lineHeight =</span> <span class="st">"1em"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="htmlwidget-5080ff8917be00c155ca" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5080ff8917be00c155ca">{"x":{"filter":"none","extensions":["Buttons"],"data":[[null,"ID_56","ID_9848","ID_50","ID_31","ID_341","ID_442","ID_1319","ID_292","ID_1337","ID_436","ID_1162","ID_3082","ID_1180","ID_1760","ID_318","ID_288","ID_1191","ID_3056","ID_15","ID_2730","ID_1170","ID_1776","ID_1175","ID_1763","ID_1332","ID_1752","ID_1808","ID_1822","ID_2727","ID_666","ID_183","ID_3067","ID_1721","ID_586","ID_633","ID_2732","ID_2747","ID_908","ID_997","ID_1798","ID_1740","ID_1251","ID_1222","ID_1805","ID_2745","ID_1409","ID_1465","ID_3348","ID_4749","ID_1510","ID_1547","ID_3328","ID_3356","ID_1842","ID_1900","ID_3359","ID_3961","ID_2351","ID_2483","ID_3963","ID_4744","ID_2621","ID_2628","ID_3953","ID_3962","ID_3047","ID_3259","ID_4289","ID_3019","ID_3402","ID_3435","ID_4850","ID_4858","ID_7466","ID_7468","ID_6392","ID_6749","ID_8162","ID_3987","ID_4865","ID_3975","ID_8163","ID_8166","ID_4871","ID_6777","ID_4769","ID_7581","ID_6978","ID_6414","ID_8196","ID_8203","ID_6804","ID_7159","ID_8206","ID_4955","ID_7179","ID_7191","ID_5398","ID_6905","ID_7201","ID_7206","ID_9207","ID_9293","ID_9356","ID_9221","ID_9922","ID_10001","ID_10004","ID_10023","ID_10686","ID_10158","ID_10665","ID_6346","ID_12859","ID_12985","ID_13318","ID_13365","ID_13095","ID_13306","ID_11903","ID_8231","ID_11667","ID_8516","ID_8119","ID_8087","ID_10882","ID_11146"],[1977,1978,1980,1980,1981,1981,1982,1982,1983,1983,1984,1984,1985,1985,1986,1986,1987,1987,1988,1988,1989,1989,1990,1990,1991,1991,1992,1992,1993,1993,1994,1994,1994,1994,1995,1995,1995,1995,1996,1996,1996,1996,1997,1997,1997,1997,1998,1998,1998,1998,1999,1999,1999,1999,2000,2000,2000,2000,2001,2001,2001,2001,2002,2002,2002,2002,2003,2003,2003,2003,2004,2004,2004,2004,2005,2005,2005,2005,2006,2006,2006,2006,2007,2007,2007,2007,2008,2008,2008,2008,2009,2009,2009,2009,2010,2010,2010,2010,2011,2011,2011,2011,2012,2012,2012,2012,2013,2013,2013,2013,2014,2014,2014,2014,2015,2015,2016,2016,2016,2016,2017,2017,2017,2017,2018,2018,2019,2019],["Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","Recruited","Recruited","NonRecruited","NonRecruited","NonRecruited","NonRecruited"],["F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F"],[null,null,null,null,null,null,null,null,null,null,null,null,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,true,true,null,null,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,true,null,null],["SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB"],["AGF94001","AGF94017","AGF94134","AGF94029","AGF00066","AGF94066","AGF95170","AGF97002","AGF94101","AGF97020","AGF95124","AGF96011","AGF03028","AGF96029","AGF00017","AGF94051","AGF94107","AGF96040","AGF03002","AGF94129","AGF02007","AGF96019","AGF00033","AGF96024","AGF00020","AGF97015","AGF00009","AGF00065","AGF00079","AGF02004","AGP94111","AGP94004","AGF03013","AGF99036","AGP95042","AGP95089","AGF02009","AGF02024","AGP96003","AGP96093","AGF00055","AGF99055","AGP97053","AGP97021","AGF00062","AGF02022","AGP98038","AGP98094","AGF04025","AGF09006","AGP99032","AGP99069","AGF04005","AGF04033","AGP00016","AGP00082","AGF04036","AGF06009","AGP01003","AGP01138","AGF06011","AGF09001","AGP02026","AGP02033","AGF06001","AGF06010","AGP03058","AGP03079","AGF08002","AGP03030","AGP04045","AGP04090","AGF10004","AGF10012","AGP05183","AGP05189","AGF14001","AGP05203","AGP06489","AGP06070","AGF10019","AGP06012","AGP07133","AGP07436","AGF10025","AGP07295","AGP08080","AGP08145","AGF12006","AGF14023","AGP09210","AGP09245","AGP09101","AGP09110","AGP10026","AGP10067","AGP10303","AGP10409","AGP11022","AGP11154","AGP11284","AGP11387","AGP12014","AGP12114","AGP12180","AGP12040","AGP13071","AGP13151","AGP13154","AGP13173","AGP14070","AGP14131","AGP14047","AGP14096","AGP15190","AGP15316","AGP16283","AGP16330","AGP16041","AGP16271","AGP17300","AGP17428","AGP17064","AGP17398","AGP18017","AGP18027","AGP19058","AGP19337"],[null,null,"AGF95134",null,"AGF94124",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,"AGF97018",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>uniqueID_pup<\/th>\n      <th>PupBirthyear<\/th>\n      <th>status<\/th>\n      <th>PupSex<\/th>\n      <th>pup_SNPed<\/th>\n      <th>Beach<\/th>\n      <th>PupTissueID<\/th>\n      <th>AltTissueID_1<\/th>\n      <th>AltTissueID_2<\/th>\n      <th>AltTissueID_3<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv"],"pageLength":10,"columnDefs":[{"className":"dt-right","targets":1}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[5]; $(this.api().cell(row, 5).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[6]; $(this.api().cell(row, 6).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[7]; $(this.api().cell(row, 7).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[8]; $(this.api().cell(row, 8).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[9]; $(this.api().cell(row, 9).node()).css({'font-size':'75%','line-height':'1em'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+</div>
+</div>
+<p><br></p>
+<p>Summarize the sample selection by strata (year, recruitment success, SNP availability).</p>
+<div class="cell" data-figure-width="9">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>selction_summary <span class="ot">&lt;-</span> data_selction <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data =</span> selction_summary <span class="sc">|&gt;</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(status <span class="sc">!=</span> <span class="st">"Recruited"</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">x =</span> PupBirthyear, <span class="at">y =</span> n, <span class="at">fill =</span> status),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data =</span> selction_summary <span class="sc">|&gt;</span> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(status <span class="sc">==</span> <span class="st">"Recruited"</span>),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">x =</span> PupBirthyear, <span class="at">y =</span> <span class="sc">-</span>n, <span class="at">fill =</span> status),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> selction_summary <span class="sc">|&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>              <span class="fu">group_by</span>(status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">y =</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="fl">1.5</span> <span class="sc">-</span> <span class="fu">as.numeric</span>(<span class="fu">factor</span>(status)))) ,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1974</span>, <span class="at">y =</span> y, <span class="at">label =</span> n, <span class="at">color =</span> status)) <span class="sc">+</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span> ) <span class="sc">+</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(pup_SNPed <span class="sc">~</span> ., </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller =</span> label_both,</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">switch =</span> <span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"pt"</span>),</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> clr_light,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">size =</span> .<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="01_sample_selection_files/figure-html/unnamed-chunk-5-1.svg" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../qmd/references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+</body></html>

@@ -10,6 +10,7 @@ book:
   date: "2022-08-12"
   chapters:
     - index.qmd
+    - qmd/01_sample_selection.qmd
     - qmd/references.qmd
   navbar:
     search: true
