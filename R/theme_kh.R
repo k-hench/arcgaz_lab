@@ -23,6 +23,11 @@ clr_def <- "gray50"
 fll_def <- "gray95"
 sz_def <- .4
 
+clr1 <- "#db4a32"
+clr2 <- "gray30"
+clr3 <- "gray60"
+clr4 <- "gray90"
+
 def_list <- list(colour = clr_def,
                  fill = fll_def,
                  size = sz_def)

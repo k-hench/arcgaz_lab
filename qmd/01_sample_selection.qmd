@@ -19,11 +19,26 @@ library(here)
 library(DT)
 source(here("R", "theme_kh.R"))
 set.seed(42)
+
+clrs <- c(Recruited = clr1,
+          NonRecruited = clr2,
+          BeachDead = clr3)
 ```
+
+Samples with issues, to avoid for sample selection.
+
+```{r}
+troubblemakers <- c(
+   "AGP00150", # 2_explore..., l 23, duplicated tissue id
+   "AGP08134", # 2_explore..., l 65 ff potential sample mixup
+   "AGP08139", #                       continued
+   "AGP18084"  # 2_explore..., l 69, mum genetic mismatch
+)
+```
+
 
 Read in Annekes cleaned sample list.
 Then, give an overview of the available samples over the years, stratified by recruitment success and SNP genotype availability.
-
 
 ```{r}
 #| figure-width: 7
@@ -32,7 +47,8 @@ data <- readxl::read_xlsx(here("../import_anneke/data/processed/Unique_filtered_
   dplyr::select(PupTissueID, uniqueID_pup, PupBirthyear, status, PupSex, pup_SNPed, Beach) |> 
   filter(Beach == "SSB",
          PupSex == "F",
-         !is.na(PupBirthyear))
+         !is.na(PupBirthyear),
+         !(PupTissueID %in% troubblemakers))
 
 # data |> 
 #   group_by(uniqueID_pup) |> 
@@ -53,6 +69,7 @@ data |>
   facet_grid(pup_SNPed ~ .,
              labeller = label_both,
              switch = "y") +
+  scale_fill_manual(values = clrs) +
   theme(legend.position = "bottom",
         axis.line.x = element_line(size = .2),
         legend.key.height = unit(2, "pt"))
@@ -62,19 +79,23 @@ For each year, two samples are randomly chosen per recruitment status.
 Try to use only SNPed samples, if necessary  fill up to two samples where possible (if only one sample is available, pick this one).
 
 ```{r}
-data_selction <- data |> 
+data_selection <- data |> 
+  mutate(fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
+                                 "NonRecruited", status)) |> 
   filter(!duplicated(uniqueID_pup),
          PupSex == "F",
-         status %in% c("Recruited", "NonRecruited") ) |> 
-  group_by(PupBirthyear, status, pup_SNPed) |> 
-  mutate(selector = sample(1:n())) |> 
+         fitness_class %in% c("Recruited", "NonRecruited") ) |> 
+  group_by(PupBirthyear, fitness_class, pup_SNPed) |> 
+  mutate(selector = sample(1:n())) |> # random selection order within year x fitness_class
   filter(selector <= 2) |>            # slice_sample(n = 2) cant subset for years with only one sample 
   ungroup() |> 
-  arrange(PupBirthyear, status, pup_SNPed) |> 
-  group_by(PupBirthyear, status) |> 
+  arrange(PupBirthyear, fitness_class, pup_SNPed) |> 
+  group_by(PupBirthyear, fitness_class) |> 
   mutate(priority = row_number()) |>
   ungroup() |> 
-  filter(priority <= 2)                # if possible, use SNPed samples, fill up if necessary
+  filter(priority <= 2) |>             # if possible, use SNPed samples, fill up if necessary
+  mutate(uniqueID_pup = if_else(is.na(uniqueID_pup),   # the sample from 1977 is IDed as <NA>
+                                "ID_00", uniqueID_pup))                     # change to ID_00
 ```
 
 Looking up available alternative tissue samples for the selected individuals.
@@ -84,27 +105,21 @@ Looking up available alternative tissue samples for the selected individuals.
 uniqueIDs <- openxlsx::read.xlsx(here("../import_anneke/data/processed/all_msat_genotypes_uniqueID.xlsx")) %>%
   dplyr::select(dummyID, PlateNumber, uniqueID) |> 
   filter(!dummyID %in% c("AGP08134", "AGP18084")) |>
-  # mutate(uniqueID = if_else(dummyID %in% c("AGP08134", "AGP18084"),  NA_character_ , uniqueID),   # annekes approach, keeps NA, NA row
-  #        dummyID = if_else(dummyID %in% c("AGP08134", "AGP18084"),  NA_character_ , dummyID)) |>  # ...134/139 match, genetic mother mismatch for ...84
   dplyr::select(-PlateNumber) |> 
   unique()
 
 # Merge IDs with list of remaining individuals
-tissue_options <- data_selction |> 
+tissue_options <- data_selection |> 
   left_join(uniqueIDs, by = c("uniqueID_pup" = "uniqueID")) |> 
-  dplyr::rename(`AltTissueID`= dummyID )
-
-# Check duplicates (ie alternative IDs)
-# tissue_options %>%
-#   filter(uniqueID_pup %in% unique(.[["uniqueID_pup"]][duplicated(.[["uniqueID_pup"]])]))
+  dplyr::rename(`AltTissueID`= dummyID ) |> 
+  mutate(pup_SNPed = if_else(is.na(pup_SNPed), FALSE, pup_SNPed))
 
 all_duplicated <- \(x){
   duplicated(x) | duplicated(x, fromLast = TRUE)
 }
 
-
 tissue_options %>%
-  mutate(AltTissueID = ifelse(AltTissueID==PupTissueID, NA, AltTissueID)) %>%
+  mutate(AltTissueID = ifelse(AltTissueID == PupTissueID, NA, AltTissueID)) %>%
   group_by(uniqueID_pup) %>%
   arrange(AltTissueID) %>%
   mutate(numbering = paste0("AltTissueID_", row_number())) %>%
@@ -130,34 +145,64 @@ Summarize the sample selection by strata (year, recruitment success, SNP availab
 ```{r}
 #| figure-width: 9
 #| fig-height: 5
-selction_summary <- data_selction |> 
+selection_summary <- data_selection |> 
   group_by(PupBirthyear, status, pup_SNPed) |> 
-  count() 
+  count() |> 
+  mutate(fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
+                                 "NonRecruited", status))
 
 ggplot() +
-  geom_bar(data = selction_summary |> 
-             filter(status != "Recruited"),
+  geom_bar(data = selection_summary |> 
+             filter(status == "Recruited"),
            aes(x = PupBirthyear, y = n, fill = status),
            stat = "identity",
            color = "transparent") +
-  geom_bar(data = selction_summary |> 
-             filter(status == "Recruited"),
+  geom_bar(data = selection_summary |> 
+             filter(status != "Recruited"),
            aes(x = PupBirthyear, y = -n, fill = status),
            stat = "identity",
            color = "transparent") +
-  geom_text(data = selction_summary |>
-              group_by(status, pup_SNPed) |> 
+  geom_text(data = selection_summary |>
+              group_by(fitness_class, pup_SNPed) |> 
               summarise(n = sum(n)) |> 
               ungroup() |> 
-              mutate(y = 2 * (1.5 - as.numeric(factor(status)))) ,
-            aes(x = 1974, y = y, label = n, color = status)) +
+              mutate(y = -2 * (1.5 - as.numeric(factor(fitness_class)))) ,
+            aes(x = 1974, y = y, label = n, color = fitness_class),
+            family = fnt_sans) +
   geom_hline(yintercept = 0 ) +
   facet_grid(pup_SNPed ~ ., 
              labeller = label_both,
              switch = "y") +
+  scale_fill_manual(values = clrs) +
+  scale_color_manual(values = clrs, guide = "none") +
+  coord_cartesian(ylim = c(-2, 2)) +
   theme(legend.position = "bottom",
         legend.key.height = unit(2, "pt"),
         panel.grid.major.x = element_line(color = clr_light,
                                           size = .3))
+```
+
+Format and export the sample selection to `tsv` file.
+
+```{r}
+tissue_options %>%
+  mutate(AltTissueID = ifelse(AltTissueID==PupTissueID, NA, AltTissueID)) %>%
+  group_by(uniqueID_pup) %>%
+  arrange(AltTissueID) %>%
+  mutate(numbering = paste0("AltTissueID_", row_number())) %>%
+  pivot_wider(id_cols = PupTissueID:fitness_class,
+              names_from = "numbering",
+              values_from = "AltTissueID") |> 
+  arrange(PupBirthyear, uniqueID_pup) |> 
+  dplyr::select(unique_id = uniqueID_pup,
+                birth_year = PupBirthyear,
+                status, fitness_class,
+                sex = PupSex,
+                SNPed = pup_SNPed,
+                beach = Beach,
+                tissue_id = PupTissueID,
+                tissue_id_alt1 = AltTissueID_1,
+                tissue_id_alt2 = AltTissueID_2) |> 
+  write_tsv(here("data", "samples_temporal.tsv"))
 ```
 
