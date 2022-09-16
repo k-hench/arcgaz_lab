@@ -244,6 +244,8 @@ tissue_options %>%
                 sex = PupSex,
                 SNPed = pup_SNPed,
                 beach = Beach,
+                plate_number = PlateNumber,
+                plate_location = PlateLocation,
                 tissue_id = PupTissueID,
                 tissue_id_alt1 = AltTissueID_1) |> 
   write_tsv(here("data", "samples_temporal.tsv"))
