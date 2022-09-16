@@ -76,19 +76,9 @@ data |>
         legend.key.height = unit(2, "pt"))
 ```
 
-For each year, two samples are randomly chosen per recruitment status.
-Try to use only SNPed samples, if necessary  fill up to two samples where possible (if only one sample is available, pick this one).
+To be able to include information about the available DNA extractions into the sample selection, we read in the tissue sample specific concentrations and merge them to the data.
 
 ```{r}
-# best_concentrations <- readxl::read_xlsx(here("../import_anneke/data/processed/concentrations_remaining_recruits.xlsx")) |> 
-#   bind_rows(readxl::read_xlsx(here("../import_anneke/data/processed/concentrations_remaining_nonrecruits_with_SNPed_mums.xlsx"))) |> 
-#   dplyr::select(uniqueID_pup, SampleID:Gel) |> 
-#   arrange(uniqueID_pup, -Picogreen_con) |> 
-#   filter(!duplicated(uniqueID_pup))
-
-# sample_to_id <- readxl::read_xlsx(here("../import_anneke/data/processed/Trains_metadata_2022.xlsx")) |> 
-#    dplyr::select(SampleID = PupTissueID, uniqueID_pup)
-
 data_con <- readxl::read_xlsx(here("../import_anneke/data/processed/Agaz_DNA_extraction_info.xlsx")) |> 
    rename(PupTissueID = SampleID)
  
@@ -100,18 +90,21 @@ data_with_con <- data |>
          fitness_class %in% c("Recruited", "NonRecruited") ) |>
   left_join(data_con)
 
-data_top_con <- data_with_con |> 
-  group_by(PupBirthyear, status, pup_SNPed) |> 
-  mutate(con_where_possible = if_else(is.na(Picogreen_con) | Picogreen_con < 45,
-                                      runif(n = length(Picogreen_con), -150, -100),
-                                      Picogreen_con)) |> 
-  arrange(PupBirthyear, status, pup_SNPed, -con_where_possible) |>
-  mutate(con_rank = row_number(),
-         con_n = n()) |> 
-  # filter(con_rank < 4) |> 
-  ungroup()
+con_threshold <- 45
 ```
 
+Than we compute a weighting column based on the pico-green concentration, by replacing values below `r con_threshold` as well as `NA` with random negative numbers between `-150` and `-100` (to penalize those samples in the random draw later).
+
+```{r}
+data_top_con <- data_with_con |> 
+  group_by(PupBirthyear, status, pup_SNPed) |> 
+  mutate(con_where_possible = if_else(is.na(Picogreen_con) | Picogreen_con < con_threshold,
+                                      runif(n = length(Picogreen_con), -150, -100),
+                                      Picogreen_con))
+```
+
+For each year, one sample is randomly chosen per recruitment status.
+Try to use only SNPed samples, if necessary  fill up with un-SNPed samples where possible (if only one sample is available, pick this one).
 
 ```{r}
 data_selection <- data_top_con |> 
@@ -132,7 +125,7 @@ data_selection <- data_top_con |>
   filter(priority <= 1) |>             # if possible, use SNPed samples, fill up if necessary
   mutate(uniqueID_pup = if_else(is.na(uniqueID_pup),   # the sample from 1977 is IDed as <NA>
                                 "ID_00", uniqueID_pup)) |> # change to ID_00
-  mutate(y = c(Recruited = .5,
+  mutate(y = c(Recruited = .5,            # adding coordinates for visualization
                NonRecruited = -.5,
               BeachDead = -1.5)[status])                      
 ```
@@ -162,7 +155,7 @@ tissue_options %>%
   group_by(uniqueID_pup) %>%
   arrange(AltTissueID) %>%
   mutate(numbering = paste0("AltTissueID_", row_number())) %>%
-  pivot_wider(id_cols = c(PupTissueID:Beach, Picogreen_con, PlateNumber, PlateLocation),
+  pivot_wider(id_cols = PupTissueID:Beach,
               names_from = "numbering",
               values_from = "AltTissueID") |> 
   dplyr::select(uniqueID_pup:Beach, everything()) |> 
@@ -250,5 +243,27 @@ tissue_options %>%
                 tissue_id = PupTissueID,
                 tissue_id_alt1 = AltTissueID_1) |> 
   write_tsv(here("data", "samples_temporal.tsv"))
+```
+
+Glimpse at how the selected samples compare in terms of pico green concentration with the overall concentration distribution.
+
+```{r}
+#| figure-width: 5
+#| fig-height: 2.5
+data_con |> 
+  filter(!is.na(Picogreen_con)) |> 
+  ggplot(aes(x = Picogreen_con)) +
+  geom_density(data = data_selection |> 
+  filter(!is.na(Picogreen_con)) ,
+               aes(color = status,
+                   fill = after_scale(prismatic::clr_alpha(color, .15)),
+                   y = ..count..),
+  adjust = .6) +
+    geom_density(aes(y = ..count.. / 25),
+               adjust = .6, linetype = 3) +
+   scale_color_manual(values = clrs, guide = "none") +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
 ```
 
