@@ -33,8 +33,6 @@ format:
     code-summary: "toggle code"
     mainfont: "'TeX Gyre Pagella', 'Crimson Text', 'Noto Serif', serif"
     monofont: "'Fira Code', 'Ubuntu mono', monospace"
-  pdf:
-    documentclass: scrreprt
 
 execute:
   message: false

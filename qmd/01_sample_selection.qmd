@@ -184,7 +184,7 @@ ggplot() +
                                           size = .3))
 ```
 
-Format and export the sample selection to `tsv` file.
+Format and export the sample selection to [`tsv` file](https://github.com/k-hench/arcgaz_gl/blob/master/data/samples_temporal.tsv).
 
 ```{r}
 tissue_options %>%
