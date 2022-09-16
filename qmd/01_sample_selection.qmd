@@ -33,6 +33,7 @@ troubblemakers <- c(
    "AGP08134", # 2_explore..., l 65 ff potential sample mixup
    "AGP08139", #                       continued
    "AGP18084"  # 2_explore..., l 69, mum genetic mismatch
+   # REMEMBER TO ALSO EXCLUDE THE SAMPLES THAT HAVE ALREADY BEEN RESEQED
 )
 ```
 
@@ -61,7 +62,7 @@ data |>
   group_by(PupBirthyear, status, pup_SNPed) |> 
   count() |> 
   ggplot() +
-  geom_hline(yintercept = 2, linetype = 3 ) +
+  # geom_hline(yintercept = 2, linetype = 3 ) +
   geom_bar(aes(x = PupBirthyear, y = n, fill = status),
            stat = "identity",
            position = position_dodge2(width = 0.9, preserve = "single"),
@@ -85,15 +86,16 @@ data_selection <- data |>
   filter(!duplicated(uniqueID_pup),
          PupSex == "F",
          fitness_class %in% c("Recruited", "NonRecruited") ) |> 
-  group_by(PupBirthyear, fitness_class, pup_SNPed) |> 
-  mutate(selector = sample(1:n())) |> # random selection order within year x fitness_class
-  filter(selector <= 2) |>            # slice_sample(n = 2) cant subset for years with only one sample 
+  group_by(PupBirthyear, status, pup_SNPed) |> 
+  slice_sample(n = 1) |> 
+  # mutate(selector = sample(1:n())) |> # random selection order within year x fitness_class
+  # filter(selector <= 2) |>            # slice_sample(n = 2) cant subset for years with only one sample 
   ungroup() |> 
-  arrange(PupBirthyear, fitness_class, pup_SNPed) |> 
-  group_by(PupBirthyear, fitness_class) |> 
+  arrange(PupBirthyear, status, pup_SNPed) |> 
+  group_by(PupBirthyear, status) |> 
   mutate(priority = row_number()) |>
   ungroup() |> 
-  filter(priority <= 2) |>             # if possible, use SNPed samples, fill up if necessary
+  filter(priority <= 1) |>             # if possible, use SNPed samples, fill up if necessary
   mutate(uniqueID_pup = if_else(is.na(uniqueID_pup),   # the sample from 1977 is IDed as <NA>
                                 "ID_00", uniqueID_pup))                     # change to ID_00
 ```
@@ -186,14 +188,14 @@ Format and export the sample selection to `tsv` file.
 
 ```{r}
 tissue_options %>%
-  mutate(AltTissueID = ifelse(AltTissueID==PupTissueID, NA, AltTissueID)) %>%
+  mutate(AltTissueID = ifelse(AltTissueID == PupTissueID, NA, AltTissueID)) %>%
   group_by(uniqueID_pup) %>%
   arrange(AltTissueID) %>%
   mutate(numbering = paste0("AltTissueID_", row_number())) %>%
   pivot_wider(id_cols = PupTissueID:fitness_class,
               names_from = "numbering",
               values_from = "AltTissueID") |> 
-  arrange(PupBirthyear, uniqueID_pup) |> 
+  arrange(-PupBirthyear, uniqueID_pup) |> 
   dplyr::select(unique_id = uniqueID_pup,
                 birth_year = PupBirthyear,
                 status, fitness_class,
@@ -201,8 +203,7 @@ tissue_options %>%
                 SNPed = pup_SNPed,
                 beach = Beach,
                 tissue_id = PupTissueID,
-                tissue_id_alt1 = AltTissueID_1,
-                tissue_id_alt2 = AltTissueID_2) |> 
+                tissue_id_alt1 = AltTissueID_1) |> 
   write_tsv(here("data", "samples_temporal.tsv"))
 ```
 
