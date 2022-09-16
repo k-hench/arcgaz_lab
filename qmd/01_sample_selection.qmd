@@ -80,14 +80,48 @@ For each year, two samples are randomly chosen per recruitment status.
 Try to use only SNPed samples, if necessary  fill up to two samples where possible (if only one sample is available, pick this one).
 
 ```{r}
-data_selection <- data |> 
+# best_concentrations <- readxl::read_xlsx(here("../import_anneke/data/processed/concentrations_remaining_recruits.xlsx")) |> 
+#   bind_rows(readxl::read_xlsx(here("../import_anneke/data/processed/concentrations_remaining_nonrecruits_with_SNPed_mums.xlsx"))) |> 
+#   dplyr::select(uniqueID_pup, SampleID:Gel) |> 
+#   arrange(uniqueID_pup, -Picogreen_con) |> 
+#   filter(!duplicated(uniqueID_pup))
+
+# sample_to_id <- readxl::read_xlsx(here("../import_anneke/data/processed/Trains_metadata_2022.xlsx")) |> 
+#    dplyr::select(SampleID = PupTissueID, uniqueID_pup)
+
+data_con <- readxl::read_xlsx(here("../import_anneke/data/processed/Agaz_DNA_extraction_info.xlsx")) |> 
+   rename(PupTissueID = SampleID)
+ 
+data_with_con <- data |> 
+  mutate(fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
+                                 "NonRecruited", status)) |> 
+  filter(!duplicated(uniqueID_pup),
+         PupSex == "F",
+         fitness_class %in% c("Recruited", "NonRecruited") ) |>
+  left_join(data_con)
+
+data_top_con <- data_with_con |> 
+  group_by(PupBirthyear, status, pup_SNPed) |> 
+  mutate(con_where_possible = if_else(is.na(Picogreen_con) | Picogreen_con < 45,
+                                      runif(n = length(Picogreen_con), -150, -100),
+                                      Picogreen_con)) |> 
+  arrange(PupBirthyear, status, pup_SNPed, -con_where_possible) |>
+  mutate(con_rank = row_number(),
+         con_n = n()) |> 
+  # filter(con_rank < 4) |> 
+  ungroup()
+```
+
+
+```{r}
+data_selection <- data_top_con |> 
   mutate(fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
                                  "NonRecruited", status)) |> 
   filter(!duplicated(uniqueID_pup),
          PupSex == "F",
          fitness_class %in% c("Recruited", "NonRecruited") ) |> 
   group_by(PupBirthyear, status, pup_SNPed) |> 
-  slice_sample(n = 1) |> 
+  slice_sample(n = 1, weight_by = scales::rescale(con_where_possible)) |> 
   # mutate(selector = sample(1:n())) |> # random selection order within year x fitness_class
   # filter(selector <= 2) |>            # slice_sample(n = 2) cant subset for years with only one sample 
   ungroup() |> 
@@ -97,14 +131,17 @@ data_selection <- data |>
   ungroup() |> 
   filter(priority <= 1) |>             # if possible, use SNPed samples, fill up if necessary
   mutate(uniqueID_pup = if_else(is.na(uniqueID_pup),   # the sample from 1977 is IDed as <NA>
-                                "ID_00", uniqueID_pup))                     # change to ID_00
+                                "ID_00", uniqueID_pup)) |> # change to ID_00
+  mutate(y = c(Recruited = .5,
+               NonRecruited = -.5,
+              BeachDead = -1.5)[status])                      
 ```
 
 Looking up available alternative tissue samples for the selected individuals.
 
 ```{r}
 # Collect alternative tissue IDs
-uniqueIDs <- openxlsx::read.xlsx(here("../import_anneke/data/processed/all_msat_genotypes_uniqueID.xlsx")) %>%
+uniqueIDs <- openxlsx::read.xlsx(here("../import_anneke/data/processed/all_msat_genotypes_uniqueID.xlsx")) %>% 
   dplyr::select(dummyID, PlateNumber, uniqueID) |> 
   filter(!dummyID %in% c("AGP08134", "AGP18084")) |>
   dplyr::select(-PlateNumber) |> 
@@ -125,7 +162,7 @@ tissue_options %>%
   group_by(uniqueID_pup) %>%
   arrange(AltTissueID) %>%
   mutate(numbering = paste0("AltTissueID_", row_number())) %>%
-  pivot_wider(id_cols = PupTissueID:Beach,
+  pivot_wider(id_cols = c(PupTissueID:Beach, Picogreen_con, PlateNumber, PlateLocation),
               names_from = "numbering",
               values_from = "AltTissueID") |> 
   dplyr::select(uniqueID_pup:Beach, everything()) |> 
@@ -145,43 +182,48 @@ tissue_options %>%
 Summarize the sample selection by strata (year, recruitment success, SNP availability).
 
 ```{r}
-#| figure-width: 9
-#| fig-height: 5
+#| figure-width: 13
+#| fig-height: 6.5
 selection_summary <- data_selection |> 
   group_by(PupBirthyear, status, pup_SNPed) |> 
-  count() |> 
+  summarise(n = n(),
+            y = y[[1]]) |> 
   mutate(fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
                                  "NonRecruited", status))
 
-ggplot() +
-  geom_bar(data = selection_summary |> 
-             filter(status == "Recruited"),
-           aes(x = PupBirthyear, y = n, fill = status),
-           stat = "identity",
-           color = "transparent") +
-  geom_bar(data = selection_summary |> 
-             filter(status != "Recruited"),
-           aes(x = PupBirthyear, y = -n, fill = status),
-           stat = "identity",
+lab_c <- \(clr, lab){glue::glue("<span style='color:{clr}'>{lab}</span> ")}
+
+data_selection |> 
+ggplot(aes(x = PupBirthyear)) +
+  geom_rect(aes(xmin = PupBirthyear - .475,
+                xmax = PupBirthyear + .475,
+                ymin = y - .475,
+                ymax = y + .475,
+                fill = status),
            color = "transparent") +
   geom_text(data = selection_summary |>
-              group_by(fitness_class, pup_SNPed) |> 
-              summarise(n = sum(n)) |> 
-              ungroup() |> 
-              mutate(y = -2 * (1.5 - as.numeric(factor(fitness_class)))) ,
-            aes(x = 1974, y = y, label = n, color = fitness_class),
+              group_by(status, pup_SNPed) |> 
+              summarise(n = sum(n),
+                        y = y[[1]]) |> 
+              ungroup() ,
+            aes(x = 1974, y = y, label = n, color = status),
             family = fnt_sans) +
-  geom_hline(yintercept = 0 ) +
+  geom_text(data = data_selection |> 
+              filter(!is.na(Picogreen_con)),
+            aes(y = y, label = glue::glue("({PlateNumber}/{PlateLocation}) {round(Picogreen_con)}")),
+            angle = 90, color = "white", family = "Josefin sans", fontface = "bold", size = 3) +
   facet_grid(pup_SNPed ~ ., 
              labeller = label_both,
              switch = "y") +
-  scale_fill_manual(values = clrs) +
+  scale_fill_manual(values = clrs, guide = "none") +
   scale_color_manual(values = clrs, guide = "none") +
-  coord_cartesian(ylim = c(-2, 2)) +
-  theme(legend.position = "bottom",
-        legend.key.height = unit(2, "pt"),
-        panel.grid.major.x = element_line(color = clr_light,
-                                          size = .3))
+  scale_y_continuous(breaks = c(-1.5, -.5, .5),
+                     labels = map2_chr(rev(clrs), rev(names(clrs)), lab_c)) +
+  coord_cartesian(ylim = c(-2, 1)) +
+  theme(axis.text.y = ggtext::element_markdown(angle = 90, hjust = .5),
+        axis.ticks.y = element_blank(),
+        axis.title.y = element_blank(),
+        strip.placement = "outside")
 ```
 
 Format and export the sample selection to [`tsv` file](https://github.com/k-hench/arcgaz_gl/blob/master/data/samples_temporal.tsv).
@@ -192,7 +234,7 @@ tissue_options %>%
   group_by(uniqueID_pup) %>%
   arrange(AltTissueID) %>%
   mutate(numbering = paste0("AltTissueID_", row_number())) %>%
-  pivot_wider(id_cols = PupTissueID:fitness_class,
+  pivot_wider(id_cols =  c(PupTissueID:fitness_class, Picogreen_con, PlateNumber, PlateLocation),
               names_from = "numbering",
               values_from = "AltTissueID") |> 
   arrange(-PupBirthyear, uniqueID_pup) |> 
