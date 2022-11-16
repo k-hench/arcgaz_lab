@@ -109,10 +109,12 @@ Try to use only SNPed samples, if necessary  fill up with un-SNPed samples where
 ```{r}
 data_selection <- data_top_con |> 
   mutate(fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
-                                 "NonRecruited", status)) |> 
+                                 "NonRecruited", status)) |>
   filter(!duplicated(uniqueID_pup),
          PupSex == "F",
-         fitness_class %in% c("Recruited", "NonRecruited") ) |> 
+         fitness_class %in% c("Recruited", "NonRecruited"),
+         !grepl(PlateNumber, pattern = "[A-Za-z]"),
+         !is.na(PlateNumber)) |> 
   group_by(PupBirthyear, status, pup_SNPed) |> 
   slice_sample(n = 1, weight_by = scales::rescale(con_where_possible)) |> 
   # mutate(selector = sample(1:n())) |> # random selection order within year x fitness_class
@@ -222,7 +224,7 @@ ggplot(aes(x = PupBirthyear)) +
 Format and export the sample selection to [`tsv` file](https://github.com/k-hench/arcgaz_gl/blob/master/data/samples_temporal.tsv).
 
 ```{r}
-tissue_options %>%
+sample_selection_export <- tissue_options %>%
   mutate(AltTissueID = ifelse(AltTissueID == PupTissueID, NA, AltTissueID)) %>%
   group_by(uniqueID_pup) %>%
   arrange(AltTissueID) %>%
@@ -241,7 +243,9 @@ tissue_options %>%
                 plate_number = PlateNumber,
                 plate_location = PlateLocation,
                 tissue_id = PupTissueID,
-                tissue_id_alt1 = AltTissueID_1) |> 
+                tissue_id_alt1 = AltTissueID_1)
+
+sample_selection_export |> 
   write_tsv(here("data", "samples_temporal.tsv"))
 ```
 
@@ -267,3 +271,22 @@ data_con |>
         axis.ticks.y = element_blank())
 ```
 
+ <!s--
+```{r}
+#| eval: false
+na_dash <- \(x){if_else(is.na(x), "-", as.character(x))}
+
+sample_selection_export |> 
+  mutate(status = factor(status, levels = c("Recruited", "NonRecruited", "BeachDead")),
+         SNPed = factor(SNPed, levels = c("TRUE", "FALSE"))) |> 
+  arrange( SNPed, status, -picogreen_concentration) |> 
+  ungroup() |> 
+  mutate(picogreen_concentration = sprintf("%.1f", picogreen_concentration),
+         across(everything(),
+                na_dash),
+         send_rank = row_number()) |>
+  dplyr::select(send_rank, everything()) |> 
+  dplyr::select(-fitness_class) |> 
+  knitr::kable(format =  "latex")
+```
+--->
