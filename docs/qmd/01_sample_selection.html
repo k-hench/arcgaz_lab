@@ -126,17 +126,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 }</script>
 
 <script src="../site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<script src="../site_libs/jquery-3.5.1/jquery.min.js"></script>
 <link href="../site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-<script src="../site_libs/datatables-binding-0.17/datatables.js"></script>
-<link href="../site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
-<link href="../site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet">
-<script src="../site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
-<link href="../site_libs/dt-ext-buttons-1.10.20/css/buttons.dataTables.min.css" rel="stylesheet">
-<script src="../site_libs/dt-ext-buttons-1.10.20/js/dataTables.buttons.min.js"></script>
-<script src="../site_libs/dt-ext-buttons-1.10.20/js/buttons.html5.min.js"></script>
-<script src="../site_libs/dt-ext-buttons-1.10.20/js/buttons.colVis.min.js"></script>
-<script src="../site_libs/dt-ext-buttons-1.10.20/js/buttons.print.min.js"></script>
+<script src="../site_libs/datatables-binding-0.26/datatables.js"></script>
+<script src="../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="../site_libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="../site_libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="../site_libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="../site_libs/dt-ext-buttons-1.12.1/css/buttons.dataTables.min.css" rel="stylesheet">
+<script src="../site_libs/dt-ext-buttons-1.12.1/js/dataTables.buttons.min.js"></script>
+<script src="../site_libs/dt-ext-buttons-1.12.1/js/buttons.html5.min.js"></script>
+<script src="../site_libs/dt-ext-buttons-1.12.1/js/buttons.colVis.min.js"></script>
+<script src="../site_libs/dt-ext-buttons-1.12.1/js/buttons.print.min.js"></script>
 <link href="../site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
 <script src="../site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 
@@ -214,7 +214,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#quality-check-for-selected-samples" id="toc-quality-check-for-selected-samples" class="nav-link active" data-scroll-target="#quality-check-for-selected-samples"><span class="toc-section-number">1.1</span>  Quality Check for Selected Samples</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -252,7 +258,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell" data-figure-width="7">
 <details>
 <summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="fu">here</span>(<span class="st">"../import_anneke/data/processed/Unique_filtered_dataset_2022.xlsx"</span>)) <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="fu">here</span>(<span class="st">"data/lab/Unique_filtered_dataset_2022.xlsx"</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(PupTissueID, uniqueID_pup, PupBirthyear, status, PupSex, pup_SNPed, Beach) <span class="sc">|&gt;</span> </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Beach <span class="sc">==</span> <span class="st">"SSB"</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>         PupSex <span class="sc">==</span> <span class="st">"F"</span>,</span>
@@ -291,105 +297,184 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_con <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="fu">here</span>(<span class="st">"../import_anneke/data/processed/Agaz_DNA_extraction_info.xlsx"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">rename</span>(<span class="at">PupTissueID =</span> SampleID)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>data_with_con <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fitness_class =</span> <span class="fu">if_else</span>(status <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BeachDead"</span>, <span class="st">"NonRecruited"</span>),</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"NonRecruited"</span>, status)) <span class="sc">|&gt;</span> </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(uniqueID_pup),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>         PupSex <span class="sc">==</span> <span class="st">"F"</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>         fitness_class <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Recruited"</span>, <span class="st">"NonRecruited"</span>) ) <span class="sc">|&gt;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(data_con)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>con_threshold <span class="ot">&lt;-</span> <span class="dv">45</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_con <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="fu">here</span>(<span class="st">"data/lab/Agaz_DNA_extraction_info.xlsx"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">rename</span>(<span class="at">PupTissueID =</span> SampleID) <span class="co"># note that there are tissue duplications (eg AGF14017)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Meanwhile, the concentration of more samples has been measured:</p>
+<div class="cell">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cellColor <span class="ot">&lt;-</span> <span class="cf">function</span>(style) </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  fg  <span class="ot">&lt;-</span> style<span class="sc">$</span><span class="fu">getFillForegroundXSSFColor</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  rgb <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(fg<span class="sc">$</span><span class="fu">getRgb</span>(), <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  rgb <span class="ot">&lt;-</span> <span class="fu">paste</span>(rgb, <span class="at">collapse =</span> <span class="st">""</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(rgb)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>row_colors <span class="ot">&lt;-</span> \(xls_sheet,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">sheet_idx =</span> <span class="dv">1</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">col_idx =</span> <span class="dv">1</span>){</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  wb     <span class="ot">&lt;-</span> <span class="fu">loadWorkbook</span>(xls_sheet)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  sheet1 <span class="ot">&lt;-</span> <span class="fu">getSheets</span>(wb)[[sheet_idx]]</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get all rows</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  rows  <span class="ot">&lt;-</span> <span class="fu">getRows</span>(sheet1)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  cells <span class="ot">&lt;-</span> <span class="fu">getCells</span>(rows, <span class="at">colIndex =</span> col_idx)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  styles <span class="ot">&lt;-</span> <span class="fu">sapply</span>(cells, getCellStyle)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map_chr</span>(styles[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(styles)], cellColor)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>clr_row <span class="ot">&lt;-</span> \(row_color){</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">if_else</span>(row_color <span class="sc">==</span> <span class="st">""</span>, <span class="st">"#ffffff"</span>, <span class="fu">str_c</span>(<span class="st">"#"</span>, row_color))<span class="sc">|&gt;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_to_upper</span>()</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>xls_david_con <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data/lab/All_unique_notSNPped.xlsx"</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>clr_classes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#FF0000"</span> <span class="ot">=</span> <span class="st">"DNA not usable, needs reextraction."</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"#FFC000"</span> <span class="ot">=</span> <span class="st">"DNA of borderline quality - avoid if possible."</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"#00B050"</span> <span class="ot">=</span> <span class="st">"DNA good, maybe re-run gel before further use. Already (planed) genotyped on SNP array."</span>,</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"#92D050"</span> <span class="ot">=</span> <span class="st">"DNA good, maybe re-run gel before further use. Spare sample (high n)."</span>,</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"#FFFFFF"</span> <span class="ot">=</span> <span class="st">"Not checked"</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>data_david_con <span class="ot">&lt;-</span> data_david_con <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(xls_david_con) <span class="sc">|&gt;</span> </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_color =</span> <span class="fu">row_colors</span>(xls_david_con)) <span class="sc">|&gt;</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(PupTissueID,</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                <span class="at">david_con =</span> Concentration,</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                <span class="at">originally_considdered_borderline  =</span><span class="st">`</span><span class="at">...13</span><span class="st">`</span>,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>                row_color) <span class="sc">|&gt;</span> </span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">originally_considdered_borderline =</span> <span class="sc">!</span><span class="fu">is.na</span>(originally_considdered_borderline),</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>         <span class="at">row_color =</span> <span class="fu">clr_row</span>(row_color) ,</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">dna_quality_class =</span> <span class="fu">factor</span>(clr_classes[row_color], <span class="at">levels =</span> clr_classes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_david_substitutes <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="fu">here</span>(<span class="st">"data/lab/Kosmas_samples.xlsx"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">substitue_class =</span> <span class="fu">c</span>(<span class="at">red =</span> <span class="st">"Need substitute"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">green =</span> <span class="st">"Substitute"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">blue =</span> <span class="st">"Measure concentration!"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">white =</span> <span class="st">"Not checked"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">yellow =</span> <span class="st">"What do we do with this?"</span>)[row_color]) <span class="sc">|&gt;</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">PupTissueID =</span> tissue_id, substitue_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data_with_con <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fitness_class =</span> <span class="fu">if_else</span>(status <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BeachDead"</span>, <span class="st">"NonRecruited"</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"NonRecruited"</span>, status)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(uniqueID_pup),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         PupSex <span class="sc">==</span> <span class="st">"F"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         fitness_class <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Recruited"</span>, <span class="st">"NonRecruited"</span>) ) <span class="sc">|&gt;</span>  <span class="co"># 4,025 × 8</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(data_con) <span class="sc">|&gt;</span>                                         <span class="co"># 4,320 × 14 (tissue samples have duplicated concentration measurements)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(data_david_con) <span class="sc">|&gt;</span>                                   <span class="co"># 4,320 × 18</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(data_david_substitutes) <span class="sc">|&gt;</span>                           <span class="co"># 4,320 × 19</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">con_check =</span> <span class="fu">abs</span>(<span class="fu">as.double</span>(Picogreen_con)<span class="sc">-</span><span class="fu">as.double</span>(david_con)),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">con_inconsistent =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(con_check), <span class="cn">FALSE</span>, con_check <span class="sc">&gt;</span> .<span class="dv">1</span> ),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">dna_con =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(Picogreen_con),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">as.double</span>(david_con),                  <span class="co"># incl. new concentration measurements</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">as.double</span>(Picogreen_con)),             <span class="co"># incl. original bad concentrations that were not transferred to davids file</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_wgs_nl =</span> <span class="dv">1200</span> <span class="sc">/</span> dna_con,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_SNP_nl =</span> <span class="dv">750</span> <span class="sc">/</span> dna_con,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_total =</span> <span class="fu">replace_na</span>(vol_wgs_nl,<span class="dv">0</span>) <span class="sc">+</span> <span class="fu">replace_na</span>(vol_SNP_nl,<span class="dv">0</span>))</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># data_with_con |&gt;</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(con_inconsistent) |&gt;</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   select(PupTissueID, Picogreen_con,</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#          david_con, con_check,</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#          `Was_re-extracted`) |&gt; view()</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>con_threshold <span class="ot">&lt;-</span> <span class="dv">45</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Than we compute a weighting column based on the pico-green concentration, by replacing values below 45 as well as <code>NA</code> with random negative numbers between <code>-150</code> and <code>-100</code> (to penalize those samples in the random draw later).</p>
 <div class="cell">
 <details>
 <summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data_top_con <span class="ot">&lt;-</span> data_with_con <span class="sc">|&gt;</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">con_where_possible =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(Picogreen_con) <span class="sc">|</span> Picogreen_con <span class="sc">&lt;</span> con_threshold,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="fu">runif</span>(<span class="at">n =</span> <span class="fu">length</span>(Picogreen_con), <span class="sc">-</span><span class="dv">150</span>, <span class="sc">-</span><span class="dv">100</span>),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                                      Picogreen_con))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data_top_con <span class="ot">&lt;-</span> data_with_con <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">con_where_possible =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(Picogreen_con) <span class="sc">|</span> Picogreen_con <span class="sc">&lt;</span> con_threshold,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="fu">runif</span>(<span class="at">n =</span> <span class="fu">length</span>(Picogreen_con), <span class="sc">-</span><span class="dv">150</span>, <span class="sc">-</span><span class="dv">100</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                      Picogreen_con))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>For each year, one sample is randomly chosen per recruitment status. Try to use only SNPed samples, if necessary fill up with un-SNPed samples where possible (if only one sample is available, pick this one).</p>
 <div class="cell">
 <details>
 <summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_selection <span class="ot">&lt;-</span> data_top_con <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fitness_class =</span> <span class="fu">if_else</span>(status <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BeachDead"</span>, <span class="st">"NonRecruited"</span>),</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"NonRecruited"</span>, status)) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(uniqueID_pup),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         PupSex <span class="sc">==</span> <span class="st">"F"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>         fitness_class <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Recruited"</span>, <span class="st">"NonRecruited"</span>),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span><span class="fu">grepl</span>(PlateNumber, <span class="at">pattern =</span> <span class="st">"[A-Za-z]"</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span><span class="fu">is.na</span>(PlateNumber)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">weight_by =</span> scales<span class="sc">::</span><span class="fu">rescale</span>(con_where_possible)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(selector = sample(1:n())) |&gt; # random selection order within year x fitness_class</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter(selector &lt;= 2) |&gt;            # slice_sample(n = 2) cant subset for years with only one sample </span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status) <span class="sc">|&gt;</span> </span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">priority =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(priority <span class="sc">&lt;=</span> <span class="dv">1</span>) <span class="sc">|&gt;</span>             <span class="co"># if possible, use SNPed samples, fill up if necessary</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">uniqueID_pup =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(uniqueID_pup),   <span class="co"># the sample from 1977 is IDed as &lt;NA&gt;</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"ID_00"</span>, uniqueID_pup)) <span class="sc">|&gt;</span> <span class="co"># change to ID_00</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="at">Recruited =</span> .<span class="dv">5</span>,            <span class="co"># adding coordinates for visualization</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">NonRecruited =</span> <span class="sc">-</span>.<span class="dv">5</span>,</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">BeachDead =</span> <span class="sc">-</span><span class="fl">1.5</span>)[status])                      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_selection <span class="ot">&lt;-</span> data_top_con <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fitness_class =</span> <span class="fu">if_else</span>(status <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BeachDead"</span>, <span class="st">"NonRecruited"</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"NonRecruited"</span>, status)) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(uniqueID_pup),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>         PupSex <span class="sc">==</span> <span class="st">"F"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         fitness_class <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Recruited"</span>, <span class="st">"NonRecruited"</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span><span class="fu">grepl</span>(PlateNumber, <span class="at">pattern =</span> <span class="st">"[A-Za-z]"</span>),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span><span class="fu">is.na</span>(PlateNumber)) <span class="sc">|&gt;</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">weight_by =</span> scales<span class="sc">::</span><span class="fu">rescale</span>(con_where_possible)) <span class="sc">|&gt;</span> </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(selector = sample(1:n())) |&gt; # random selection order within year x fitness_class</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter(selector &lt;= 2) |&gt;            # slice_sample(n = 2) cant subset for years with only one sample </span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status) <span class="sc">|&gt;</span> </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">priority =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(priority <span class="sc">&lt;=</span> <span class="dv">1</span>) <span class="sc">|&gt;</span>             <span class="co"># if possible, use SNPed samples, fill up if necessary</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">uniqueID_pup =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(uniqueID_pup),   <span class="co"># the sample from 1977 is IDed as &lt;NA&gt;</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"ID_00"</span>, uniqueID_pup)) <span class="sc">|&gt;</span> <span class="co"># change to ID_00</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="at">Recruited =</span> .<span class="dv">5</span>,            <span class="co"># adding coordinates for visualization</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">NonRecruited =</span> <span class="sc">-</span>.<span class="dv">5</span>,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">BeachDead =</span> <span class="sc">-</span><span class="fl">1.5</span>)[status])                      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Looking up available alternative tissue samples for the selected individuals.</p>
 <div class="cell">
 <details>
 <summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect alternative tissue IDs</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>uniqueIDs <span class="ot">&lt;-</span> openxlsx<span class="sc">::</span><span class="fu">read.xlsx</span>(<span class="fu">here</span>(<span class="st">"../import_anneke/data/processed/all_msat_genotypes_uniqueID.xlsx"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(dummyID, PlateNumber, uniqueID) <span class="sc">|&gt;</span> </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>dummyID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGP08134"</span>, <span class="st">"AGP18084"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>PlateNumber) <span class="sc">|&gt;</span> </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge IDs with list of remaining individuals</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>tissue_options <span class="ot">&lt;-</span> data_selection <span class="sc">|&gt;</span> </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(uniqueIDs, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"uniqueID_pup"</span> <span class="ot">=</span> <span class="st">"uniqueID"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">`</span><span class="at">AltTissueID</span><span class="st">`</span><span class="ot">=</span> dummyID ) <span class="sc">|&gt;</span> </span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pup_SNPed =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(pup_SNPed), <span class="cn">FALSE</span>, pup_SNPed))</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>all_duplicated <span class="ot">&lt;-</span> \(x){</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">duplicated</span>(x) <span class="sc">|</span> <span class="fu">duplicated</span>(x, <span class="at">fromLast =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>tissue_options <span class="sc">%&gt;%</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AltTissueID =</span> <span class="fu">ifelse</span>(AltTissueID <span class="sc">==</span> PupTissueID, <span class="cn">NA</span>, AltTissueID)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(uniqueID_pup) <span class="sc">%&gt;%</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(AltTissueID) <span class="sc">%&gt;%</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">numbering =</span> <span class="fu">paste0</span>(<span class="st">"AltTissueID_"</span>, <span class="fu">row_number</span>())) <span class="sc">%&gt;%</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> PupTissueID<span class="sc">:</span>Beach,</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="st">"numbering"</span>,</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">"AltTissueID"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(uniqueID_pup<span class="sc">:</span>Beach, <span class="fu">everything</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PupBirthyear)  <span class="sc">|&gt;</span> </span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>(<span class="at">extensions =</span> <span class="st">'Buttons'</span>,</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>            <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'Blfrtip'</span>,</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>                           <span class="at">buttons =</span> <span class="fu">c</span>(<span class="st">'copy'</span>, <span class="st">'csv'</span>),</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pageLength =</span> <span class="dv">10</span>), </span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">rownames =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">class =</span> <span class="st">'cell-border stripe'</span>) <span class="sc">|&gt;</span>  </span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatStyle</span>(<span class="at">columns =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>              <span class="at">fontSize =</span> <span class="st">'75%'</span>,</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>              <span class="at">lineHeight =</span> <span class="st">"1em"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect alternative tissue IDs</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>uniqueIDs <span class="ot">&lt;-</span> openxlsx<span class="sc">::</span><span class="fu">read.xlsx</span>(<span class="fu">here</span>(<span class="st">"data/lab/all_msat_genotypes_uniqueID.xlsx"</span>)) <span class="sc">|&gt;</span>  </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(dummyID, PlateNumber, uniqueID) <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>dummyID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGP08134"</span>, <span class="st">"AGP18084"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>PlateNumber) <span class="sc">|&gt;</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge IDs with list of remaining individuals</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>tissue_options <span class="ot">&lt;-</span> data_selection <span class="sc">|&gt;</span> </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(uniqueIDs, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"uniqueID_pup"</span> <span class="ot">=</span> <span class="st">"uniqueID"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">`</span><span class="at">AltTissueID</span><span class="st">`</span><span class="ot">=</span> dummyID ) <span class="sc">|&gt;</span> </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pup_SNPed =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(pup_SNPed), <span class="cn">FALSE</span>, pup_SNPed))</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>all_duplicated <span class="ot">&lt;-</span> \(x){</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">duplicated</span>(x) <span class="sc">|</span> <span class="fu">duplicated</span>(x, <span class="at">fromLast =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>tissue_options <span class="sc">%&gt;%</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AltTissueID =</span> <span class="fu">ifelse</span>(AltTissueID <span class="sc">==</span> PupTissueID, <span class="cn">NA</span>, AltTissueID)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(uniqueID_pup) <span class="sc">%&gt;%</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(AltTissueID) <span class="sc">%&gt;%</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">numbering =</span> <span class="fu">paste0</span>(<span class="st">"AltTissueID_"</span>, <span class="fu">row_number</span>())) <span class="sc">%&gt;%</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> PupTissueID<span class="sc">:</span>Beach,</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="st">"numbering"</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">"AltTissueID"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(uniqueID_pup<span class="sc">:</span>Beach, <span class="fu">everything</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PupBirthyear)  <span class="sc">|&gt;</span> </span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>(<span class="at">extensions =</span> <span class="st">'Buttons'</span>,</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>            <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'Blfrtip'</span>,</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>                           <span class="at">buttons =</span> <span class="fu">c</span>(<span class="st">'copy'</span>, <span class="st">'csv'</span>),</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pageLength =</span> <span class="dv">10</span>), </span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">rownames =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">class =</span> <span class="st">'cell-border stripe'</span>) <span class="sc">|&gt;</span>  </span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatStyle</span>(<span class="at">columns =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>              <span class="at">fontSize =</span> <span class="st">'75%'</span>,</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>              <span class="at">lineHeight =</span> <span class="st">"1em"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 
 <div id="htmlwidget-69673648d18c56ce3472" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-69673648d18c56ce3472">{"x":{"filter":"none","extensions":["Buttons"],"data":[["ID_9848","ID_1691","ID_51","ID_1690","ID_1341","ID_1164","ID_1153","ID_1329","ID_1757","ID_2730","ID_1154","ID_1779","ID_1694","ID_2727","ID_1743","ID_1716","ID_916","ID_908","ID_1731","ID_1311","ID_1251","ID_2745","ID_1384","ID_1421","ID_4863","ID_1516","ID_1547","ID_3332","ID_1948","ID_1843","ID_3337","ID_2431","ID_2366","ID_3703","ID_2679","ID_2674","ID_2641","ID_3029","ID_3053","ID_6408","ID_3502","ID_7253","ID_4858","ID_4819","ID_7470","ID_6753","ID_4023","ID_4031","ID_4755","ID_4814","ID_8167","ID_6782","ID_4830","ID_8176","ID_6974","ID_11518","ID_8191","ID_6801","ID_4989","ID_4984","ID_7183","ID_6931","ID_6910","ID_5170","ID_9451","ID_9395","ID_9325","ID_10000","ID_9892","ID_10042","ID_10121","ID_10603","ID_10644","ID_13057","ID_13014","ID_13271","ID_13318","ID_13170","ID_11793","ID_8344","ID_8525","ID_8122","ID_8064","ID_11085","ID_11138"],[1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1996,1996,1997,1997,1997,1998,1998,1998,1999,1999,1999,2000,2000,2000,2001,2001,2001,2002,2002,2002,2003,2003,2003,2004,2004,2004,2005,2005,2005,2006,2006,2006,2007,2007,2007,2008,2008,2008,2009,2009,2009,2010,2010,2010,2011,2011,2011,2012,2012,2012,2013,2013,2013,2014,2014,2014,2015,2015,2016,2016,2016,2017,2017,2017,2018,2018,2019,2019],["Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","BeachDead","NonRecruited"],["F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F"],[false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false],["SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB"],["AGF94134","AGF99005","AGF97017","AGF99004","AGF97024","AGF96013","AGF96002","AGF97012","AGF00014","AGF02007","AGF96003","AGF00036","AGF99009","AGF02004","AGF99058","AGF99031","AGP96011","AGP96003","AGF99046","AGP97115","AGP97053","AGF02022","AGP98013","AGP98050","AGF10017","AGP99038","AGP99069","AGF04009","AGP00140","AGP00017","AGF04014","AGP01083","AGP01018","AGF05008","AGP02085","AGP02080","AGP02046","AGP03040","AGP03065","AGF14017","AGP04301","AGP04018","AGF10012","AGP05161","AGP05191","AGP05320","AGP06161","AGP06184","AGF09012","AGP07093","AGP07481","AGP07366","AGP08235","AGP08335","AGF12002","AGP09185","AGP09153","AGP09063","AGP10169","AGP10152","AGP10325","AGP11196","AGP11163","AGP11171","AGP12277","AGP12219","AGP12149","AGP13150","AGP13041","AGP13192","AGP14092","AGP14412","AGP14453","AGP15388","AGP15345","AGP16235","AGP16283","AGP16121","AGP17190","AGP17327","AGP17421","AGP18182","AGP18020","AGP19276","AGP19329"],["AGF95134",null,"AGF94014",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>uniqueID_pup<\/th>\n      <th>PupBirthyear<\/th>\n      <th>status<\/th>\n      <th>PupSex<\/th>\n      <th>pup_SNPed<\/th>\n      <th>Beach<\/th>\n      <th>PupTissueID<\/th>\n      <th>AltTissueID_1<\/th>\n      <th>AltTissueID_2<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv"],"pageLength":10,"columnDefs":[{"className":"dt-right","targets":1}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[5]; $(this.api().cell(row, 5).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[6]; $(this.api().cell(row, 6).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[7]; $(this.api().cell(row, 7).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[8]; $(this.api().cell(row, 8).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[9]; $(this.api().cell(row, 9).node()).css({'font-size':'75%','line-height':'1em'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-69673648d18c56ce3472">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["ID_9848","ID_1691","ID_51","ID_1690","ID_1341","ID_1164","ID_1153","ID_1329","ID_1757","ID_2730","ID_1154","ID_1779","ID_1694","ID_2727","ID_1743","ID_1716","ID_916","ID_908","ID_1731","ID_1311","ID_1251","ID_2745","ID_1384","ID_1421","ID_4863","ID_1516","ID_1547","ID_3332","ID_1948","ID_1843","ID_3337","ID_2431","ID_2366","ID_3703","ID_2679","ID_2674","ID_2641","ID_3029","ID_3053","ID_6408","ID_3502","ID_7253","ID_4858","ID_4819","ID_7470","ID_6753","ID_4023","ID_4031","ID_4755","ID_4814","ID_8167","ID_6782","ID_4830","ID_8176","ID_6974","ID_11518","ID_8191","ID_6801","ID_4989","ID_4984","ID_7183","ID_6931","ID_6910","ID_5170","ID_9451","ID_9395","ID_9325","ID_10000","ID_9892","ID_10042","ID_10121","ID_10603","ID_10644","ID_13057","ID_13014","ID_13271","ID_13318","ID_13170","ID_11793","ID_8344","ID_8525","ID_8122","ID_8064","ID_11085","ID_11138"],[1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1996,1996,1997,1997,1997,1998,1998,1998,1999,1999,1999,2000,2000,2000,2001,2001,2001,2002,2002,2002,2003,2003,2003,2004,2004,2004,2005,2005,2005,2006,2006,2006,2007,2007,2007,2008,2008,2008,2009,2009,2009,2010,2010,2010,2011,2011,2011,2012,2012,2012,2013,2013,2013,2014,2014,2014,2015,2015,2016,2016,2016,2017,2017,2017,2018,2018,2019,2019],["Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","Recruited","BeachDead","NonRecruited","BeachDead","NonRecruited"],["F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F","F"],[false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false],["SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB","SSB"],["AGF94134","AGF99005","AGF97017","AGF99004","AGF97024","AGF96013","AGF96002","AGF97012","AGF00014","AGF02007","AGF96003","AGF00036","AGF99009","AGF02004","AGF99058","AGF99031","AGP96011","AGP96003","AGF99046","AGP97115","AGP97053","AGF02022","AGP98013","AGP98050","AGF10017","AGP99038","AGP99069","AGF04009","AGP00140","AGP00017","AGF04014","AGP01083","AGP01018","AGF05008","AGP02085","AGP02080","AGP02046","AGP03040","AGP03065","AGF14017","AGP04301","AGP04018","AGF10012","AGP05161","AGP05191","AGP05320","AGP06161","AGP06184","AGF09012","AGP07093","AGP07481","AGP07366","AGP08235","AGP08335","AGF12002","AGP09185","AGP09153","AGP09063","AGP10169","AGP10152","AGP10325","AGP11196","AGP11163","AGP11171","AGP12277","AGP12219","AGP12149","AGP13150","AGP13041","AGP13192","AGP14092","AGP14412","AGP14453","AGP15388","AGP15345","AGP16235","AGP16283","AGP16121","AGP17190","AGP17327","AGP17421","AGP18182","AGP18020","AGP19276","AGP19329"],["AGF95134",null,"AGF94014",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"cell-border stripe\">\n  <thead>\n    <tr>\n      <th>uniqueID_pup<\/th>\n      <th>PupBirthyear<\/th>\n      <th>status<\/th>\n      <th>PupSex<\/th>\n      <th>pup_SNPed<\/th>\n      <th>Beach<\/th>\n      <th>PupTissueID<\/th>\n      <th>AltTissueID_1<\/th>\n      <th>AltTissueID_2<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv"],"pageLength":10,"columnDefs":[{"className":"dt-right","targets":1}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[5]; $(this.api().cell(row, 5).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[6]; $(this.api().cell(row, 6).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[7]; $(this.api().cell(row, 7).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[8]; $(this.api().cell(row, 8).node()).css({'font-size':'75%','line-height':'1em'});\nvar value=data[9]; $(this.api().cell(row, 9).node()).css({'font-size':'75%','line-height':'1em'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 </div>
 </div>
 <p><br></p>
@@ -397,127 +482,154 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell" data-figure-width="13">
 <details>
 <summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>selection_summary <span class="ot">&lt;-</span> data_selection <span class="sc">|&gt;</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> y[[<span class="dv">1</span>]]) <span class="sc">|&gt;</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fitness_class =</span> <span class="fu">if_else</span>(status <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BeachDead"</span>, <span class="st">"NonRecruited"</span>),</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"NonRecruited"</span>, status))</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>lab_c <span class="ot">&lt;-</span> \(clr, lab){glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"&lt;span style='color:{clr}'&gt;{lab}&lt;/span&gt; "</span>)}</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>data_selection <span class="sc">|&gt;</span> </span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> PupBirthyear)) <span class="sc">+</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> PupBirthyear <span class="sc">-</span> .<span class="dv">475</span>,</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">xmax =</span> PupBirthyear <span class="sc">+</span> .<span class="dv">475</span>,</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">ymin =</span> y <span class="sc">-</span> .<span class="dv">475</span>,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">ymax =</span> y <span class="sc">+</span> .<span class="dv">475</span>,</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill =</span> status),</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> selection_summary <span class="sc">|&gt;</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>              <span class="fu">group_by</span>(status, pup_SNPed) <span class="sc">|&gt;</span> </span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">sum</span>(n),</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                        <span class="at">y =</span> y[[<span class="dv">1</span>]]) <span class="sc">|&gt;</span> </span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ungroup</span>() ,</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1974</span>, <span class="at">y =</span> y, <span class="at">label =</span> n, <span class="at">color =</span> status),</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> fnt_sans) <span class="sc">+</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> data_selection <span class="sc">|&gt;</span> </span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Picogreen_con)),</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">y =</span> y, <span class="at">label =</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"({PlateNumber}/{PlateLocation}) {round(Picogreen_con)}"</span>)),</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">family =</span> <span class="st">"Josefin sans"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(pup_SNPed <span class="sc">~</span> ., </span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller =</span> label_both,</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>             <span class="at">switch =</span> <span class="st">"y"</span>) <span class="sc">+</span></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> clrs, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> clrs, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="sc">-</span>.<span class="dv">5</span>, .<span class="dv">5</span>),</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">map2_chr</span>(<span class="fu">rev</span>(clrs), <span class="fu">rev</span>(<span class="fu">names</span>(clrs)), lab_c)) <span class="sc">+</span></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> ggtext<span class="sc">::</span><span class="fu">element_markdown</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> .<span class="dv">5</span>),</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.placement =</span> <span class="st">"outside"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>selection_summary <span class="ot">&lt;-</span> data_selection <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PupBirthyear, status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> y[[<span class="dv">1</span>]]) <span class="sc">|&gt;</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fitness_class =</span> <span class="fu">if_else</span>(status <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BeachDead"</span>, <span class="st">"NonRecruited"</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"NonRecruited"</span>, status))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>lab_c <span class="ot">&lt;-</span> \(clr, lab){glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"&lt;span style='color:{clr}'&gt;{lab}&lt;/span&gt; "</span>)}</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>data_selection <span class="sc">|&gt;</span> </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> PupBirthyear)) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> PupBirthyear <span class="sc">-</span> .<span class="dv">475</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">xmax =</span> PupBirthyear <span class="sc">+</span> .<span class="dv">475</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">ymin =</span> y <span class="sc">-</span> .<span class="dv">475</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">ymax =</span> y <span class="sc">+</span> .<span class="dv">475</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">fill =</span> status),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> selection_summary <span class="sc">|&gt;</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>              <span class="fu">group_by</span>(status, pup_SNPed) <span class="sc">|&gt;</span> </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">sum</span>(n),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>                        <span class="at">y =</span> y[[<span class="dv">1</span>]]) <span class="sc">|&gt;</span> </span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ungroup</span>() ,</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1974</span>, <span class="at">y =</span> y, <span class="at">label =</span> n, <span class="at">color =</span> status),</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> fnt_sans) <span class="sc">+</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> data_selection <span class="sc">|&gt;</span> </span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Picogreen_con)),</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">y =</span> y, <span class="at">label =</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"({PlateNumber}/{PlateLocation}) {round(Picogreen_con)}"</span>)),</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">family =</span> <span class="st">"Josefin sans"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(pup_SNPed <span class="sc">~</span> ., </span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller =</span> label_both,</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>             <span class="at">switch =</span> <span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> clrs, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> clrs, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="sc">-</span>.<span class="dv">5</span>, .<span class="dv">5</span>),</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">map2_chr</span>(<span class="fu">rev</span>(clrs), <span class="fu">rev</span>(<span class="fu">names</span>(clrs)), lab_c)) <span class="sc">+</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> ggtext<span class="sc">::</span><span class="fu">element_markdown</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> .<span class="dv">5</span>),</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.placement =</span> <span class="st">"outside"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="01_sample_selection_files/figure-html/unnamed-chunk-8-1.svg" class="img-fluid" width="672"></p>
+<p><img src="01_sample_selection_files/figure-html/unnamed-chunk-11-1.svg" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Format and export the sample selection to <a href="https://github.com/k-hench/arcgaz_gl/blob/master/data/samples_temporal.tsv"><code>tsv</code> file</a>.</p>
 <div class="cell">
 <details>
 <summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sample_selection_export <span class="ot">&lt;-</span> tissue_options <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AltTissueID =</span> <span class="fu">ifelse</span>(AltTissueID <span class="sc">==</span> PupTissueID, <span class="cn">NA</span>, AltTissueID)) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(uniqueID_pup) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(AltTissueID) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">numbering =</span> <span class="fu">paste0</span>(<span class="st">"AltTissueID_"</span>, <span class="fu">row_number</span>())) <span class="sc">%&gt;%</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span>  <span class="fu">c</span>(PupTissueID<span class="sc">:</span>fitness_class, Picogreen_con, PlateNumber, PlateLocation),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="st">"numbering"</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">"AltTissueID"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>PupBirthyear, uniqueID_pup) <span class="sc">|&gt;</span> </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">unique_id =</span> uniqueID_pup,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">birth_year =</span> PupBirthyear,</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                status, fitness_class,</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">sex =</span> PupSex,</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">SNPed =</span> pup_SNPed,</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">beach =</span> Beach,</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">picogreen_concentration =</span> Picogreen_con,</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">plate_number =</span> PlateNumber,</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">plate_location =</span> PlateLocation,</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">tissue_id =</span> PupTissueID,</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">tissue_id_alt1 =</span> AltTissueID_1)</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>sample_selection_export <span class="sc">|&gt;</span> </span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"samples_temporal.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sample_selection_export <span class="ot">&lt;-</span> tissue_options <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AltTissueID =</span> <span class="fu">ifelse</span>(AltTissueID <span class="sc">==</span> PupTissueID, <span class="cn">NA</span>, AltTissueID)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(uniqueID_pup) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(AltTissueID) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">numbering =</span> <span class="fu">paste0</span>(<span class="st">"AltTissueID_"</span>, <span class="fu">row_number</span>())) <span class="sc">%&gt;%</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span>  <span class="fu">c</span>(PupTissueID<span class="sc">:</span>fitness_class, Picogreen_con, PlateNumber, PlateLocation),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="st">"numbering"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">"AltTissueID"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>PupBirthyear, uniqueID_pup) <span class="sc">|&gt;</span> </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">unique_id =</span> uniqueID_pup,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">birth_year =</span> PupBirthyear,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                status, fitness_class,</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">sex =</span> PupSex,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">SNPed =</span> pup_SNPed,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">beach =</span> Beach,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">picogreen_concentration =</span> Picogreen_con,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">plate_number =</span> PlateNumber,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">plate_location =</span> PlateLocation,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">tissue_id =</span> PupTissueID,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">tissue_id_alt1 =</span> AltTissueID_1)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>sample_selection_export <span class="sc">|&gt;</span> </span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"samples_temporal.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Glimpse at how the selected samples compare in terms of pico green concentration with the overall concentration distribution.</p>
-<div class="cell" data-figure-width="5">
-<details>
-<summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data_con <span class="sc">|&gt;</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Picogreen_con)) <span class="sc">|&gt;</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Picogreen_con)) <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">data =</span> data_selection <span class="sc">|&gt;</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Picogreen_con)) ,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">color =</span> status,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">fill =</span> <span class="fu">after_scale</span>(prismatic<span class="sc">::</span><span class="fu">clr_alpha</span>(color, .<span class="dv">15</span>)),</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> ..count..),</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjust =</span> .<span class="dv">6</span>) <span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..count.. <span class="sc">/</span> <span class="dv">25</span>),</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">adjust =</span> .<span class="dv">6</span>, <span class="at">linetype =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_color_manual</span>(<span class="at">values =</span> clrs, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="01_sample_selection_files/figure-html/unnamed-chunk-10-1.svg" class="img-fluid" width="672"></p>
+<section id="quality-check-for-selected-samples" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="quality-check-for-selected-samples"><span class="header-section-number">1.1</span> Quality Check for Selected Samples</h2>
+<div id="fig-gels" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-11-17-gel1.svg" class="img-fluid figure-img" data-ref-parent="fig-gels"></p>
+<p></p><figcaption class="figure-caption">(a) gel_1. Samples 1–13</figcaption><p></p>
+</figure>
 </div>
 </div>
-<p>&lt;!s–</p>
-<div class="cell">
-<details>
-<summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>na_dash <span class="ot">&lt;-</span> \(x){<span class="fu">if_else</span>(<span class="fu">is.na</span>(x), <span class="st">"-"</span>, <span class="fu">as.character</span>(x))}</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>sample_selection_export <span class="sc">|&gt;</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">status =</span> <span class="fu">factor</span>(status, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Recruited"</span>, <span class="st">"NonRecruited"</span>, <span class="st">"BeachDead"</span>)),</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">SNPed =</span> <span class="fu">factor</span>(SNPed, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"TRUE"</span>, <span class="st">"FALSE"</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>( SNPed, status, <span class="sc">-</span>picogreen_concentration) <span class="sc">|&gt;</span> </span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">picogreen_concentration =</span> <span class="fu">sprintf</span>(<span class="st">"%.1f"</span>, picogreen_concentration),</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">everything</span>(),</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                na_dash),</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">send_rank =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(send_rank, <span class="fu">everything</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>fitness_class) <span class="sc">|&gt;</span> </span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">format =</span>  <span class="st">"latex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-11-17-gel2.svg" class="img-fluid figure-img" data-ref-parent="fig-gels"></p>
+<p></p><figcaption class="figure-caption">(b) gel_2. Samples 14–26</figcaption><p></p>
+</figure>
 </div>
-<p>—&gt;</p>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.1: Gels from the 2022-11-17.</figcaption><p></p>
+</figure>
+</div>
+<p><!--
+Glimpse at how the selected samples compare in terms of pico green concentration with the overall concentration distribution.
 
 
+::: {.cell figure-width='5'}
+
+```{.r .cell-code}
+data_con |> 
+  filter(!is.na(Picogreen_con)) |> 
+  ggplot(aes(x = Picogreen_con)) +
+  geom_density(data = data_selection |> 
+  filter(!is.na(Picogreen_con)) ,
+               aes(color = status,
+                   fill = after_scale(prismatic::clr_alpha(color, .15)),
+                   y = ..count..),
+  adjust = .6) +
+    geom_density(aes(y = ..count.. / 25),
+               adjust = .6, linetype = 3) +
+   scale_color_manual(values = clrs, guide = "none") +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
+```
+:::
+
+::: {.cell}
+
+```{.r .cell-code}
+na_dash <- \(x){if_else(is.na(x), "-", as.character(x))}
+
+sample_selection_export |> 
+  mutate(status = factor(status, levels = c("Recruited", "NonRecruited", "BeachDead")),
+         SNPed = factor(SNPed, levels = c("TRUE", "FALSE"))) |> 
+  arrange( SNPed, status, -picogreen_concentration) |> 
+  ungroup() |> 
+  mutate(picogreen_concentration = sprintf("%.1f", picogreen_concentration),
+         across(everything(),
+                na_dash),
+         send_rank = row_number()) |>
+  dplyr::select(send_rank, everything()) |> 
+  dplyr::select(-fitness_class) |> 
+  knitr::kable(format =  "latex")
+```
+:::
+
+---></p>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

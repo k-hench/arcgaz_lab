@@ -15,6 +15,7 @@ knitr::opts_chunk$set(dev = "svg",
 
 library(tidyverse)
 library(readxl)
+library(xlsx)
 library(here)
 library(DT)
 source(here("R", "theme_kh.R"))
@@ -79,16 +80,92 @@ To be able to include information about the available DNA extractions into the s
 
 ```{r}
 data_con <- readxl::read_xlsx(here("data/lab/Agaz_DNA_extraction_info.xlsx")) |> 
-   rename(PupTissueID = SampleID)
- 
+   rename(PupTissueID = SampleID) # note that there are tissue duplications (eg AGF14017)
+```
+
+Meanwhile, the concentration of more samples has been measured:
+
+```{r}
+cellColor <- function(style) 
+{
+  fg  <- style$getFillForegroundXSSFColor()
+  rgb <- tryCatch(fg$getRgb(), error = function(e) NULL)
+  rgb <- paste(rgb, collapse = "")
+  return(rgb)
+}
+
+row_colors <- \(xls_sheet,
+                sheet_idx = 1,
+                col_idx = 1){
+  wb     <- loadWorkbook(xls_sheet)
+  sheet1 <- getSheets(wb)[[sheet_idx]]
+  
+  # get all rows
+  rows  <- getRows(sheet1)
+  cells <- getCells(rows, colIndex = col_idx)
+  styles <- sapply(cells, getCellStyle)
+  purrr::map_chr(styles[2:length(styles)], cellColor)
+}
+
+clr_row <- \(row_color){
+  if_else(row_color == "", "#ffffff", str_c("#", row_color))|>
+           str_to_upper()
+}
+
+xls_david_con <- here("data/lab/All_unique_notSNPped.xlsx")
+clr_classes <- c("#FF0000" = "DNA not usable, needs reextraction.",
+                 "#FFC000" = "DNA of borderline quality - avoid if possible.",
+                 "#00B050" = "DNA good, maybe re-run gel before further use. Already (planed) genotyped on SNP array.",
+                 "#92D050" = "DNA good, maybe re-run gel before further use. Spare sample (high n).",
+                 "#FFFFFF" = "Not checked")
+
+data_david_con <- data_david_con <- read_xlsx(xls_david_con) |> 
+  mutate(row_color = row_colors(xls_david_con)) |>
+  dplyr::select(PupTissueID,
+                david_con = Concentration,
+                originally_considdered_borderline  =`...13`,
+                row_color) |> 
+  mutate(originally_considdered_borderline = !is.na(originally_considdered_borderline),
+         row_color = clr_row(row_color) ,
+         dna_quality_class = factor(clr_classes[row_color], levels = clr_classes))
+```
+
+
+```{r}
+data_david_substitutes <- read_xlsx(here("data/lab/Kosmas_samples.xlsx")) |> 
+  mutate(substitue_class = c(red = "Need substitute",
+                             green = "Substitute",
+                             blue = "Measure concentration!",
+                             white = "Not checked",
+                             yellow = "What do we do with this?")[row_color]) |> 
+  dplyr::select(PupTissueID = tissue_id, substitue_class)
+```
+
+
+```{r}
 data_with_con <- data |> 
   mutate(fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
                                  "NonRecruited", status)) |> 
   filter(!duplicated(uniqueID_pup),
          PupSex == "F",
-         fitness_class %in% c("Recruited", "NonRecruited") ) |>
-  left_join(data_con)
+         fitness_class %in% c("Recruited", "NonRecruited") ) |>  # 4,025 × 8
+  left_join(data_con) |>                                         # 4,320 × 14 (tissue samples have duplicated concentration measurements)
+  left_join(data_david_con) |>                                   # 4,320 × 18
+  left_join(data_david_substitutes) |>                           # 4,320 × 19
+  mutate(con_check = abs(as.double(Picogreen_con)-as.double(david_con)),
+         con_inconsistent = if_else(is.na(con_check), FALSE, con_check > .1 ),
+         dna_con = if_else(is.na(Picogreen_con),
+                           as.double(david_con),                  # incl. new concentration measurements
+                           as.double(Picogreen_con)),             # incl. original bad concentrations that were not transferred to davids file
+         vol_wgs_nl = 1200 / dna_con,
+         vol_SNP_nl = 750 / dna_con,
+         vol_total = replace_na(vol_wgs_nl,0) + replace_na(vol_SNP_nl,0))
 
+# data_with_con |>
+#   filter(con_inconsistent) |>
+#   select(PupTissueID, Picogreen_con,
+#          david_con, con_check,
+#          `Was_re-extracted`) |> view()
 con_threshold <- 45
 ```
 
@@ -248,11 +325,27 @@ sample_selection_export |>
   write_tsv(here("data", "samples_temporal.tsv"))
 ```
 
+
+## Quality Check for Selected Samples
+
+::: {#fig-gels layout-ncol=2}
+![gel_1. Samples 1--13](../img/lab/2022-11-17-gel1.svg){#fig-gel2}
+
+![gel_2. Samples 14--26](../img/lab/2022-11-17-gel2.svg){#fig-gel2}
+
+Gels from the 2022-11-17.
+:::
+
+
+
+
+ <!--
 Glimpse at how the selected samples compare in terms of pico green concentration with the overall concentration distribution.
 
 ```{r}
 #| figure-width: 5
 #| fig-height: 2.5
+#| eval: false
 data_con |> 
   filter(!is.na(Picogreen_con)) |> 
   ggplot(aes(x = Picogreen_con)) +
@@ -270,7 +363,7 @@ data_con |>
         axis.ticks.y = element_blank())
 ```
 
- <!s--
+
 ```{r}
 #| eval: false
 na_dash <- \(x){if_else(is.na(x), "-", as.character(x))}
