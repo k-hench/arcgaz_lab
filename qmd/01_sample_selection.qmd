@@ -19,7 +19,6 @@ library(here)
 library(DT)
 source(here("R", "theme_kh.R"))
 set.seed(42)
-
 clrs <- c(Recruited = clr1,
           NonRecruited = clr2,
           BeachDead = clr3)
@@ -44,7 +43,7 @@ Then, give an overview of the available samples over the years, stratified by re
 ```{r}
 #| figure-width: 7
 #| fig-height: 5
-data <- readxl::read_xlsx(here("../import_anneke/data/processed/Unique_filtered_dataset_2022.xlsx")) |> 
+data <- readxl::read_xlsx(here("data/lab/Unique_filtered_dataset_2022.xlsx")) |> 
   dplyr::select(PupTissueID, uniqueID_pup, PupBirthyear, status, PupSex, pup_SNPed, Beach) |> 
   filter(Beach == "SSB",
          PupSex == "F",
@@ -79,7 +78,7 @@ data |>
 To be able to include information about the available DNA extractions into the sample selection, we read in the tissue sample specific concentrations and merge them to the data.
 
 ```{r}
-data_con <- readxl::read_xlsx(here("../import_anneke/data/processed/Agaz_DNA_extraction_info.xlsx")) |> 
+data_con <- readxl::read_xlsx(here("data/lab/Agaz_DNA_extraction_info.xlsx")) |> 
    rename(PupTissueID = SampleID)
  
 data_with_con <- data |> 
@@ -136,7 +135,7 @@ Looking up available alternative tissue samples for the selected individuals.
 
 ```{r}
 # Collect alternative tissue IDs
-uniqueIDs <- openxlsx::read.xlsx(here("../import_anneke/data/processed/all_msat_genotypes_uniqueID.xlsx")) %>% 
+uniqueIDs <- openxlsx::read.xlsx(here("data/lab/all_msat_genotypes_uniqueID.xlsx")) |>  
   dplyr::select(dummyID, PlateNumber, uniqueID) |> 
   filter(!dummyID %in% c("AGP08134", "AGP18084")) |>
   dplyr::select(-PlateNumber) |> 
