@@ -44,7 +44,7 @@ Then, give an overview of the available samples over the years, stratified by re
 ```{r}
 #| figure-width: 7
 #| fig-height: 5
-data <- readxl::read_xlsx(here("data/lab/Unique_filtered_dataset_2022.xlsx")) |> 
+data <- readxl::read_xlsx(here("data", "lab", "Unique_filtered_dataset_2022.xlsx")) |> 
   dplyr::select(PupTissueID, uniqueID_pup, PupBirthyear, status, PupSex, pup_SNPed, Beach) |> 
   filter(Beach == "SSB",
          PupSex == "F",
@@ -79,7 +79,8 @@ data |>
 To be able to include information about the available DNA extractions into the sample selection, we read in the tissue sample specific concentrations and merge them to the data.
 
 ```{r}
-data_con <- readxl::read_xlsx(here("data/lab/Agaz_DNA_extraction_info.xlsx")) |> 
+data_con <- readxl::read_xlsx(here("data", "lab", "Agaz_DNA_extraction_info.xlsx"),
+                              col_types = c("text", "text", "text", "numeric","numeric", "text", "text")) |>  
    rename(PupTissueID = SampleID) # note that there are tissue duplications (eg AGF14017)
 ```
 
@@ -132,7 +133,7 @@ data_david_con <- data_david_con <- read_xlsx(xls_david_con) |>
 
 
 ```{r}
-data_david_substitutes <- read_xlsx(here("data/lab/Kosmas_samples.xlsx")) |> 
+data_david_substitutes <- read_xlsx(here("data", "lab", "Kosmas_samples.xlsx")) |> 
   mutate(substitue_class = c(red = "Need substitute",
                              green = "Substitute",
                              blue = "Measure concentration!",
@@ -212,7 +213,7 @@ Looking up available alternative tissue samples for the selected individuals.
 
 ```{r}
 # Collect alternative tissue IDs
-uniqueIDs <- openxlsx::read.xlsx(here("data/lab/all_msat_genotypes_uniqueID.xlsx")) |>  
+uniqueIDs <- openxlsx::read.xlsx(here("data", "lab", "all_msat_genotypes_uniqueID.xlsx")) |>  
   dplyr::select(dummyID, PlateNumber, uniqueID) |> 
   filter(!dummyID %in% c("AGP08134", "AGP18084")) |>
   dplyr::select(-PlateNumber) |> 
@@ -322,7 +323,7 @@ sample_selection_export <- tissue_options %>%
                 tissue_id_alt1 = AltTissueID_1)
 
 sample_selection_export |> 
-  write_tsv(here("data", "samples_temporal.tsv"))
+  write_tsv(here("data", "lab", "samples_temporal_initial_pick.tsv"))
 ```
 
 
@@ -336,7 +337,139 @@ sample_selection_export |>
 Gels from the 2022-11-17.
 :::
 
+# Substitutes for Sample Dropouts
 
+Grab five potential substitutes for each factor combination, excluding those selected in the initial sample selection.
+We pick up a step prior to the initial sample selection to include new concentration measurements (`dna_con` instead of `Picogreen_con`).
+
+```{r}
+data_substitute_preselection <- data_with_con |> 
+  group_by(PupBirthyear, status, pup_SNPed) |> 
+  mutate(con_where_possible = if_else(is.na(dna_con) | dna_con < con_threshold,
+                                      runif(n = length(dna_con), -150, -100),
+                                      dna_con)) |>
+  left_join(tibble(unique_id = sample_selection_export$unique_id,
+                   primary_pick = TRUE),
+            by = c(PupTissueID = "unique_id")) |>
+  mutate(primary_pick = if_else(is.na(primary_pick), FALSE, primary_pick),
+         fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
+                                 "NonRecruited", status)) |>
+  filter(!duplicated(uniqueID_pup),
+         PupSex == "F",
+         fitness_class %in% c("Recruited", "NonRecruited"),
+         !grepl(PlateNumber, pattern = "[A-Za-z]"),
+         !is.na(PlateNumber),
+         !primary_pick) |>
+  group_by(PupBirthyear, status, pup_SNPed) |> 
+  arrange(PupBirthyear, status, pup_SNPed, con_where_possible) |> 
+  mutate(selector = row_number()) |>
+  filter(selector <= 5) |>          
+  ungroup() |> 
+  group_by(PupBirthyear, status) |> 
+  mutate(priority = row_number()) |>
+  ungroup() |> 
+  filter(priority <= 5) |>             # if possible, use SNPed samples, fill up if necessary
+  mutate(uniqueID_pup = if_else(is.na(uniqueID_pup),   # the sample from 1977 is IDed as <NA>
+                                "ID_00", uniqueID_pup)) # change to ID_00
+```
+
+We only need substitutes for combinations of `birth_year` and `status`, for which we don't have approved samples yet.
+To figure out which samples potentially still need substitutes, we lead info about the 
+
+```{r}
+samples_without_substitutes <- read_tsv(here("data", "lab", "samples_for_sequencing.tsv")) |> 
+  mutate(needs_substitute = FALSE) |> 
+  left_join(sample_selection_export, by = c(PupTissueID = "tissue_id")) |> 
+  dplyr::select(birth_year, status, needs_substitute) 
+
+samples_to_remove <- read_tsv(here("data", "lab", "sample_dropouts.tsv")) |> 
+  dplyr::select(unique_id = uniqueID) |> 
+  bind_rows(read_tsv(here("data", "lab", "samples_for_sequencing.tsv")) |> 
+  dplyr::select(unique_id = uniqueID)) |> 
+  mutate(already_save = TRUE)
+
+primary_samples_still_to_check <- sample_selection_export |> 
+  dplyr::select(unique_id, tissue_id) |> 
+  left_join(samples_to_remove) |>
+  ungroup() |> 
+  mutate(already_save = replace_na(already_save, FALSE)) |> 
+  filter(!already_save)
+
+potential_substitutes <- data_substitute_preselection |>
+  left_join(samples_without_substitutes, by = c(PupBirthyear = "birth_year", status = "status")) |> 
+  mutate(needs_substitute = replace_na(needs_substitute, TRUE)) |> 
+  filter(needs_substitute) |> 
+  dplyr::select(priority, tissue_id = PupTissueID,
+                uniqueID = uniqueID_pup,
+                birth_year = PupBirthyear,
+                status, PlateNumber, PlateLocation,
+                Picogreen_con, david_con, dna_con,
+                vol_wgs_nl, vol_SNP_nl, vol_total)
+
+sample_substitutes <- data_with_con |>
+  filter(uniqueID_pup %in% primary_samples_still_to_check$unique_id) |> 
+  mutate(priority = 0)|> 
+  dplyr::select(priority, tissue_id = PupTissueID,
+                uniqueID = uniqueID_pup,
+                birth_year = PupBirthyear,
+                status, PlateNumber, PlateLocation,
+                Picogreen_con, david_con, dna_con,
+                vol_wgs_nl, vol_SNP_nl, vol_total) |> 
+  bind_rows(potential_substitutes) |> 
+  arrange(birth_year, status, priority) |> 
+  group_by(birth_year, status) |> 
+  mutate(sample_nr = row_number()) |> 
+  ungroup()
+
+sample_substitutes |> 
+  filter(is.na(dna_con)) |> 
+  dplyr::select(-c(Picogreen_con:vol_total)) |> 
+  arrange(PlateNumber, birth_year, status, priority) |> 
+  write_tsv(here("data", "lab", "samples_needing_concentration_measurements.tsv"))
+
+# sample_substitutes |> 
+#   arrange(sample_nr, birth_year, status) 
+```
+
+```{r, eval = FALSE}
+# first line of candidates (for check with E)
+sample_substitutes |> 
+  mutate(PlateNumber = as.numeric(PlateNumber)) |> 
+  # group_by(birth_year, status) |> 
+  filter(sample_nr == 1) |>   # (priority == min(priority)) |> 
+  rename(year = "birth_year",
+         plate = "PlateNumber",
+         loc = "PlateLocation",
+         pico_con = "Picogreen_con") |> 
+  arrange(plate, year, status)
+```
+
+# Comparison to biomarker QC
+
+```{r}
+biomarker_qc <- read_tsv("~/work/hoffman_lab/arcgaz_SPP/lab_reports/BMK220615-AX608-QC Report/BMK_xml/SAMPLE_MX.txt") |> 
+  mutate(PupTissueID = str_c("AG",  `Sample name`)) |> 
+  left_join(data_with_con)
+
+p1 <- biomarker_qc |> 
+  ggplot(aes(x = `Qubit(ng/ul)`, y = Picogreen_con, color = `Quality grade`)) +
+  geom_point(size = 2) +
+  # geom_text(size = 5, aes(label = `Gel ID`)) +
+  geom_abline(slope = 1, linetype = 3) +
+  scale_color_manual(values = scales::colour_ramp(c(clr1,"gray90","black"))(seq(1, 0, length.out = 4))) +
+  coord_equal()
+
+p2 <-  biomarker_qc |>
+  ggplot(aes(x = `Qubit(ng/ul)`, y = NanoVue_con /10, color = `Quality grade`)) +
+  geom_point(size = 2) +
+  # geom_text(size = 5, aes(label = `Gel ID`)) +
+  geom_abline(slope = 1, linetype = 3) +
+  scale_color_manual(values = scales::colour_ramp(c(clr1,"gray90","black"))(seq(1, 0, length.out = 4))) +
+  coord_equal()
+
+library(patchwork)
+p1 + p2  + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+```
 
 
  <!--
