@@ -18,6 +18,7 @@ library(readxl)
 library(xlsx)
 library(here)
 library(DT)
+library(patchwork)
 source(here("R", "theme_kh.R"))
 set.seed(42)
 clrs <- c(Recruited = clr1,
@@ -298,7 +299,7 @@ ggplot(aes(x = PupBirthyear)) +
         strip.placement = "outside")
 ```
 
-Format and export the sample selection to [`tsv` file](https://github.com/k-hench/arcgaz_gl/blob/master/data/samples_temporal.tsv).
+Format and export the sample selection to [`tsv` file](https://github.com/k-hench/arcgaz_gl/blob/master/data/lab/samples_temporal_initial_pick.tsv).
 
 ```{r}
 sample_selection_export <- tissue_options %>%
@@ -428,20 +429,120 @@ sample_substitutes |>
   write_tsv(here("data", "lab", "samples_needing_concentration_measurements.tsv"))
 
 # sample_substitutes |> 
-#   arrange(sample_nr, birth_year, status) 
+#   arrange(sample_nr, birth_year, status)
+```
+
+
+```{r}
+sample_layout <- sample_substitutes |> 
+  filter(is.na(dna_con)) |> 
+  dplyr::select(-c(Picogreen_con:vol_total)) |> 
+  arrange(PlateNumber, birth_year, status, priority)  |>
+  filter(!duplicated(tissue_id),
+         tissue_id != "AGP12249") |> 
+  mutate(batch_nr = row_number() %/% 88,
+         batch_idx = row_number() %% 88,
+         row_idx =  (batch_idx - 1) %% 11 + 1,
+         col_idx = (batch_idx - 1) %/% 11 + 1,
+         col_lab = LETTERS[col_idx],
+         pos = str_c(col_lab, row_idx),
+         label = tissue_id |> str_remove("AG") |> 
+           str_replace("([MPF][0-9]{2})([0-9]{3})", "\\1<br>\\2"))
+
+mushrooms <- tibble(sample_id = c("17009", "17010", "17011", "17042", "17043", "17044", "17060"),
+                    label = sample_id |> 
+                      str_replace("([0-9]{2})([0-9]{3})", "\\1<br>\\2"),
+                    x = c(8:11,1:3),
+                    y = rep(7:8, c(4,3)),
+                    col_lab = LETTERS[y],
+                    pos = str_c(col_lab, x))
+
+sample_layout |>
+  ggplot(aes(x = row_idx, y = -col_idx)) +
+  geom_polygon(inherit.aes = FALSE,
+               data = tibble(x = c(0,.5,12.75,12.75,.5,0),
+                             y = c(.5,0,0,8.75,8.75,8.25)),
+               aes(x,-y),
+               fill = NA, color = "black") +
+  ggforce::geom_circle(inherit.aes = FALSE,
+                       data = cross_df(list( x = 1:12, y = 1:8)) |> 
+                         mutate(idx = row_number(),
+                                grp = if_else(x == 12,
+                                              "control",
+                                              if_else(idx <= 79,
+                                                      "seal",
+                                                      if_else(idx <= 87,
+                                                      "mushroom",
+                                                      "empty")))),
+                       aes(x0 = x, y0 = -y,color = grp, r = .45),
+                       fill = "transparent") +
+  ggtext::geom_richtext(aes(label = label),
+                        fill = NA, label.color = NA, # remove background and outline
+                        label.padding = grid::unit(rep(0, 4), "pt"),
+                        family = fnt_sans, vjust = .55 )  +
+  ggtext::geom_richtext(inherit.aes = FALSE,
+                        data = mushrooms,
+                        aes(x = x, y = -y, label = label),
+                        fill = NA, label.color = NA, # remove background and outline
+                        label.padding = grid::unit(rep(0, 4), "pt"),
+                        family = fnt_sans, vjust = .55 ) +
+  geom_text(data = tibble(x = c(1:12,rep(.3,8)),
+                          y = c(rep(.3,12),1:8),
+                          lab = c(1:12, LETTERS[1:8] )),inherit.aes = FALSE,
+            aes(x,-y,label = lab),family = fnt_serif) +
+  scale_x_continuous(NULL, limits = c(-.3, 12.9 ), breaks = 1:12, position = "top") +
+  scale_y_continuous(NULL, limits = c(-9.3, .3 ), breaks = -8:-1, labels = LETTERS[8:1]) +
+  scale_color_manual(NULL, values = scales::colour_ramp(c(clr1,"gray90","black"))(seq(1, 0, length.out = 4))) +
+  coord_equal(expand = 0) +
+  theme_void() +
+  theme(legend.position = "bottom")
+
+# ggsave("~/Desktop/2022-11-23_sample_layout.pdf", width = 8, height = 6, device = cairo_pdf)
+# 
+# sample_layout |> 
+#    dplyr::select(SampleID = tissue_id,
+#                  Well = pos) |> 
+#   bind_rows(mushrooms |> 
+#               dplyr::select(SampleID = sample_id,
+#                  Well = pos)) |> 
+#    write_tsv("~/Desktop/2022-11-23_sample_layout.tsv")
 ```
 
 ```{r, eval = FALSE}
 # first line of candidates (for check with E)
+selection_david <- read_tsv("~/work/hoffman_lab/lab/david/First_shipment.txt") |> 
+  pivot_longer(names_to = "plate_david",
+               names_prefix = "Plate_",
+               names_transform = as.numeric,
+               everything(),
+               values_to = "tissue_id")
+
 sample_substitutes |> 
   mutate(PlateNumber = as.numeric(PlateNumber)) |> 
+  left_join(selection_david) |>
+  arrange(sample_nr, birth_year, status) |> 
+   filter(is.na(plate_david)) |>
+#  # group_by(birth_year, status) |> 
+#  # count() |> 
+#  # ggplot(aes(x = birth_year, y = n, color = status)) +
+#  # geom_hline(yintercept = 1:4,lintype = 3) +
+#  # geom_bar(stat = "identity", aes(fill = after_scale(color))) +
+#  # facet_grid(status~.)
+  filter(row_number() <= (13 * 4 + 6),
+         sample_nr <= 2) |>
   # group_by(birth_year, status) |> 
-  filter(sample_nr == 1) |>   # (priority == min(priority)) |> 
+  # filter(sample_nr == 1) |>   # (priority == min(priority)) |> 
+  dplyr::select(-plate_david) |> 
   rename(year = "birth_year",
          plate = "PlateNumber",
          loc = "PlateLocation",
          pico_con = "Picogreen_con") |> 
-  arrange(plate, year, status)
+  mutate(added = c("", "x")[(row_number() > 52) + 1]) |> 
+  filter(!(tissue_id %in% c("AGP97053", "AGP99069", "AGP05161", "AGF94134")), # ! LAST ONE IS THE 1980 SAMPLE
+          !duplicated(tissue_id)             ) |> 
+  arrange(plate, year, status) |> 
+  left_join(selection_david |>
+  write_tsv("~/work/hoffman_lab/arcgaz_SPP/arcgaz_gl/data/lab/2022-11-24_samples_for_gels_p5.tsv")
 ```
 
 # Comparison to biomarker QC
@@ -453,24 +554,22 @@ biomarker_qc <- read_tsv("~/work/hoffman_lab/arcgaz_SPP/lab_reports/BMK220615-AX
 
 p1 <- biomarker_qc |> 
   ggplot(aes(x = `Qubit(ng/ul)`, y = Picogreen_con, color = `Quality grade`)) +
-  geom_point(size = 2) +
-  # geom_text(size = 5, aes(label = `Gel ID`)) +
+  # geom_point(size = 2) +
+  geom_text(size = 5, aes(label = `Gel ID`)) +
   geom_abline(slope = 1, linetype = 3) +
   scale_color_manual(values = scales::colour_ramp(c(clr1,"gray90","black"))(seq(1, 0, length.out = 4))) +
   coord_equal()
 
 p2 <-  biomarker_qc |>
-  ggplot(aes(x = `Qubit(ng/ul)`, y = NanoVue_con /10, color = `Quality grade`)) +
-  geom_point(size = 2) +
-  # geom_text(size = 5, aes(label = `Gel ID`)) +
+  ggplot(aes(x = `Qubit(ng/ul)`, y = NanoVue_con, color = `Quality grade`)) +
+  # geom_point(size = 2) +
+  geom_text(size = 5, aes(label = `Gel ID`)) +
   geom_abline(slope = 1, linetype = 3) +
-  scale_color_manual(values = scales::colour_ramp(c(clr1,"gray90","black"))(seq(1, 0, length.out = 4))) +
-  coord_equal()
+  scale_color_manual(values = scales::colour_ramp(c(clr1,"gray90","black"))(seq(1, 0, length.out = 4))) #+
+#  coord_equal()
 
-library(patchwork)
 p1 + p2  + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 ```
-
 
  <!--
 Glimpse at how the selected samples compare in terms of pico green concentration with the overall concentration distribution.

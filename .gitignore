@@ -3,7 +3,9 @@
 
 # exclude data but keep summaries/ config tables
 data/*
-!data/samples_temporal.tsv
+!data/lab/
+data/lab/*
+!data/lab/samples_temporal_initial_pick.tsv
 
 # exclude quarto compilation side-products but track reports
 qmd/*
