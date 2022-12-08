@@ -114,7 +114,7 @@ clr_row <- \(row_color){
            str_to_upper()
 }
 
-xls_david_con <- here("data/lab/All_unique_notSNPped.xlsx")
+xls_david_con <- here("data", "lab", "All_unique_notSNPped.xlsx")
 clr_classes <- c("#FF0000" = "DNA not usable, needs reextraction.",
                  "#FFC000" = "DNA of borderline quality - avoid if possible.",
                  "#00B050" = "DNA good, maybe re-run gel before further use. Already (planed) genotyped on SNP array.",
@@ -159,9 +159,10 @@ data_with_con <- data |>
          dna_con = if_else(is.na(Picogreen_con),
                            as.double(david_con),                  # incl. new concentration measurements
                            as.double(Picogreen_con)),             # incl. original bad concentrations that were not transferred to davids file
-         vol_wgs_nl = 1200 / dna_con,
+         vol_wgs_nl = 1.2 * 450 / dna_con,                        # 400ng with > 2.5ng/ul of concentration.
          vol_SNP_nl = 750 / dna_con,
-         vol_total = replace_na(vol_wgs_nl,0) + replace_na(vol_SNP_nl,0))
+         vol_total = replace_na(vol_wgs_nl,0) +
+           replace_na(vol_SNP_nl,0))
 
 # data_with_con |>
 #   filter(con_inconsistent) |>
@@ -330,12 +331,31 @@ sample_selection_export |>
 
 ## Quality Check for Selected Samples
 
-::: {#fig-gels layout-ncol=2}
-![gel_1. Samples 1--13](../img/lab/2022-11-17-gel1.svg){#fig-gel2}
+::: {#fig-gels1 layout-ncol=2}
+![gel_1. Samples 1--13](../img/lab/2022-11-17-gel1.svg){#fig-gel1}
 
 ![gel_2. Samples 14--26](../img/lab/2022-11-17-gel2.svg){#fig-gel2}
 
-Gels from the 2022-11-17.
+![gel_3. Samples 1--13](../img/lab/2022-11-24-gel1.svg){#fig-gel3}
+
+![gel_4. Samples 14--26](../img/lab/2022-11-24-gel2.svg){#fig-gel4}
+
+![gel_5. Samples 1--13](../img/lab/2022-11-29-gel1.svg){#fig-gel5}
+
+![gel_6. Samples 14--26](../img/lab/2022-11-29-gel2.svg){#fig-gel6}
+
+![gel_7. Samples 1--13](../img/lab/2022-12-02-gel1.svg){#fig-gel7}
+
+![gel_8. Samples 14--26](../img/lab/2022-12-02-gel2.svg){#fig-gel8}
+
+![gel_09. Samples 27--39](../img/lab/2022-12-02-gel3.svg){#fig-gel9}
+
+![gel_10. Samples 1--13](../img/lab/2022-12-06-gel1.svg){#fig-gel10}
+
+![gel_11. Samples 14--26](../img/lab/2022-12-06-gel2.svg){#fig-gel11}
+
+
+Gels from the 2022-11-17 -- 2022-12-06. Run parameters: 1% agarose gel, 70V, 45min.
 :::
 
 # Substitutes for Sample Dropouts
@@ -426,7 +446,7 @@ sample_substitutes |>
   filter(is.na(dna_con)) |> 
   dplyr::select(-c(Picogreen_con:vol_total)) |> 
   arrange(PlateNumber, birth_year, status, priority) |> 
-  write_tsv(here("data", "lab", "samples_needing_concentration_measurements.tsv"))
+  write_tsv(here("data", "lab", "pico_green", "samples_needing_concentration_measurements.tsv"))
 
 # sample_substitutes |> 
 #   arrange(sample_nr, birth_year, status)
@@ -434,6 +454,8 @@ sample_substitutes |>
 
 
 ```{r}
+#| figure-width: 8
+#| fig-height: 6
 sample_layout <- sample_substitutes |> 
   filter(is.na(dna_con)) |> 
   dplyr::select(-c(Picogreen_con:vol_total)) |> 
@@ -505,10 +527,10 @@ sample_layout |>
 #   bind_rows(mushrooms |> 
 #               dplyr::select(SampleID = sample_id,
 #                  Well = pos)) |> 
-#    write_tsv("~/Desktop/2022-11-23_sample_layout.tsv")
+#   write_tsv(here("data", "lab", "pico_green", "2022-11-23_sample_layout.tsv"))
 ```
 
-```{r, eval = FALSE}
+```{r}
 # first line of candidates (for check with E)
 selection_david <- read_tsv("~/work/hoffman_lab/lab/david/First_shipment.txt") |> 
   pivot_longer(names_to = "plate_david",
@@ -516,7 +538,10 @@ selection_david <- read_tsv("~/work/hoffman_lab/lab/david/First_shipment.txt") |
                names_transform = as.numeric,
                everything(),
                values_to = "tissue_id")
+```
 
+
+```{r, eval = FALSE}
 sample_substitutes |> 
   mutate(PlateNumber = as.numeric(PlateNumber)) |> 
   left_join(selection_david) |>
@@ -539,36 +564,160 @@ sample_substitutes |>
          pico_con = "Picogreen_con") |> 
   mutate(added = c("", "x")[(row_number() > 52) + 1]) |> 
   filter(!(tissue_id %in% c("AGP97053", "AGP99069", "AGP05161", "AGF94134")), # ! LAST ONE IS THE 1980 SAMPLE
-          !duplicated(tissue_id)             ) |> 
+          !duplicated(tissue_id) ) |> 
   arrange(plate, year, status) |> 
-  left_join(selection_david |>
-  write_tsv("~/work/hoffman_lab/arcgaz_SPP/arcgaz_gl/data/lab/2022-11-24_samples_for_gels_p5.tsv")
+  left_join(selection_david) |>
+  write_tsv(here("data", "lab", "gels", "2022-11-24_samples_for_gels_px.tsv"))
 ```
 
-# Comparison to biomarker QC
+```{r}
+#| figure-width: 8
+#| fig-height: 4
+covered_cobinations <- read_tsv(here("data", "lab", "samples_for_sequencing.tsv")) |> 
+  filter(!(PupTissueID %in% c("AGP12304", "AGP13022", "AGP13038", "AGP14223", "AGP15169", "AGP15207",
+  "AGP15210", "AGP15252", "AGP16228", "AGP14186", "AGP14226", "AGP15300",
+  "AGP15359", "AGP15372", "AGP16264", "AGP16267", "AGP16280", "AGP16286",
+  "AGP16288", "AGF16007", "AGF16015", "AGF16024"))) |> # exclude extracts emptied by david 
+  mutate(needs_substitute = FALSE) |> 
+  left_join(data_with_con, by = c(PupTissueID = "PupTissueID")) |> 
+  dplyr::select(tissue_id = PupTissueID , birth_year = PupBirthyear, status, needs_substitute) |> 
+  left_join(selection_david) |> 
+  mutate(dupl = duplicated(tissue_id)) |> 
+  filter(!duplicated(tissue_id),
+         is.na(plate_david)) |> 
+  filter(!duplicated(str_c(birth_year, status)))
+
+next_samples <- sample_substitutes |> 
+  filter(!(tissue_id %in% read_tsv(here("data", "lab", "sample_dropouts.tsv"))$PupTissueID)) |> 
+  left_join(covered_cobinations |> 
+  dplyr::select(birth_year, status, needs_substitute)) |> 
+  filter(is.na(needs_substitute)) |> 
+  left_join(read_tsv(file = here("data", "lab", "gels", "2022-11-24_samples_for_gels_p5_org.tsv")) |> 
+              dplyr::select(tissue_id) |> 
+              mutate(already_checked = TRUE)) |> 
+  filter(is.na(already_checked))  |>
+  bind_rows(data_with_con |> filter(PupTissueID == "AGP00702")|> 
+  dplyr::select(tissue_id = PupTissueID,
+                uniqueID = uniqueID_pup,
+                birth_year = PupBirthyear,
+                status, PlateNumber, PlateLocation,
+                Picogreen_con, david_con, dna_con,
+                vol_wgs_nl, vol_SNP_nl, vol_total)) |> 
+  group_by(birth_year, status) |> 
+  mutate(sample_nr = sample(1:n(),
+                            n(),
+                            replace = FALSE)) |> 
+  ungroup() |> 
+  arrange(sample_nr, status) |> 
+  filter(birth_year != 1980,
+          sample_nr < 8) #|> 	2022-12-02-gel1
+    # head(26)
+
+extra20_samples <- read_tsv( here("data", "lab", "gels", "samples_extra_20.tsv")) |> 
+  mutate(other_data = str_c(c("", "e")[epiGBS + 1],
+                            c("", "t")[transcriptomics + 1])) |># pluck("ID")
+  dplyr::select(PupTissueID = BAS_ID,
+                other_data, Season) |> 
+  left_join(data_con |> 
+              mutate( PupTissueID = str_remove(PupTissueID, "[A-Z][0-9]*_")) |> 
+              filter( !is.na(PlateNumber))  |> 
+              filter( !duplicated(PupTissueID, from.last = TRUE))
+  ) |> 
+  mutate(vol_wgs_nl = 1.2 * 450 / NanoVue_con,                        # 400ng with > 2.5ng/ul of concentration.
+         vol_SNP_nl = 750 / NanoVue_con,
+         vol_total = replace_na(vol_wgs_nl,0) +
+           replace_na(vol_SNP_nl, 0),
+         uniqueID = '' ) |> 
+  dplyr::select(tissue_id = PupTissueID,
+                uniqueID,
+                birth_year = Season,
+                status = other_data,
+                PlateNumber,
+                starts_with("vol"))
+```
+
+```{r, eval = FALSE}
+# 2022-12-01 gel samples
+# next_samples |> 
+#   dplyr::select(tissue_id, uniqueID, birth_year, status, PlateNumber,
+#                 starts_with("vol")) |> 
+#   mutate(dataset = 1L) |> 
+#   bind_rows(extra20_samples |>
+#               mutate(dataset = 2L)) |> 
+#   mutate(PlateNumber = as.numeric(PlateNumber)) |> 
+#   arrange(dataset, PlateNumber, tissue_id) |>
+#   mutate(sn = row_number(),
+#          pos = (sn - 1) %% 13 + 1) |> 
+#   dplyr::select(sn,pos, everything()) |> 
+#   rename(plate = "PlateNumber",
+#          v_wgs = "vol_wgs_nl",
+#          v_SNP = "vol_SNP_nl",
+#          v_total = "vol_total") |>
+#   left_join(read_csv("~/work/hoffman_lab/lab/rebecca_n/Mum-Pup_BASid.csv"), 
+#             by = c(tissue_id = "BAS_ID")) |> 
+#   mutate(uniqueID = if_else(uniqueID == "",ID,uniqueID)) |> 
+#   dplyr::select(-ID) |> 
+#   write_tsv("data/lab/gels/2022-12-01_samples_for_gels.tsv")
+
+# 2022-12-02 gel samples
+bouvetoya_samples <- read_xlsx(here("data","lab" ,"Agaz_DNA_extraction_info.xlsx")) |> 
+  mutate(SampleID = SampleID |>
+           str_replace(" ", "-") |>
+           str_replace("\\(", "-") |>
+           str_remove("\\)")) |> 
+  separate(SampleID, into = c("sample_id_pop", "pop", "comment"),
+           sep = "-", remove = FALSE) |> 
+  mutate(pop = str_remove(pop, " *$") |> 
+           str_remove("^ *") |> 
+           str_replace("Bovetoya","Bouvetoya")) |> 
+  filter(pop == "Bouvetoya",
+         NanoVue_con) |> 
+  slice_sample(n = 13) |> 
+  mutate(PlateNumber = as.numeric(PlateNumber))
+
+next_samples |> 
+  dplyr::select(tissue_id, uniqueID, birth_year, status, PlateNumber,
+                starts_with("vol")) |> 
+  mutate(PlateNumber = as.numeric(PlateNumber)) |> 
+  arrange(PlateNumber, tissue_id) |> 
+  bind_rows(bouvetoya_samples |> 
+              dplyr::select(tissue_id = sample_id_pop,
+                            status = pop, PlateNumber))   |>
+  mutate(sn = row_number(),
+         pos = (sn - 1) %% 13 + 1) |> 
+  dplyr::select(sn,pos, everything()) |>
+  rename(plate = "PlateNumber",
+         v_wgs = "vol_wgs_nl",
+         v_SNP = "vol_SNP_nl",
+         v_total = "vol_total") |>
+  write_tsv("data/lab/gels/2022-12-02_samples_for_gels_b.tsv")
+```
+
+Overview of the samples selected for sequencing
 
 ```{r}
-biomarker_qc <- read_tsv("~/work/hoffman_lab/arcgaz_SPP/lab_reports/BMK220615-AX608-QC Report/BMK_xml/SAMPLE_MX.txt") |> 
-  mutate(PupTissueID = str_c("AG",  `Sample name`)) |> 
-  left_join(data_with_con)
+#| figure-width: 8
+#| fig-height: 3.75
+covered_cobinations |> 
+  filter(!is.na(status)) |>
+  ggplot(aes(x = birth_year, color = status)) +
+  geom_bar(stat = "count", aes(fill = after_scale(color))) +
+  # geom_bar(data = next_samples |> filter(!is.na(status)), 
+  #          stat = "count", aes(y = ..count..),  fill = "transparent") +
+  scale_color_manual(values = clrs, guide = "none") +
+  facet_grid(status~.) +
+  theme(axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank())
 
-p1 <- biomarker_qc |> 
-  ggplot(aes(x = `Qubit(ng/ul)`, y = Picogreen_con, color = `Quality grade`)) +
-  # geom_point(size = 2) +
-  geom_text(size = 5, aes(label = `Gel ID`)) +
-  geom_abline(slope = 1, linetype = 3) +
-  scale_color_manual(values = scales::colour_ramp(c(clr1,"gray90","black"))(seq(1, 0, length.out = 4))) +
-  coord_equal()
-
-p2 <-  biomarker_qc |>
-  ggplot(aes(x = `Qubit(ng/ul)`, y = NanoVue_con, color = `Quality grade`)) +
-  # geom_point(size = 2) +
-  geom_text(size = 5, aes(label = `Gel ID`)) +
-  geom_abline(slope = 1, linetype = 3) +
-  scale_color_manual(values = scales::colour_ramp(c(clr1,"gray90","black"))(seq(1, 0, length.out = 4))) #+
-#  coord_equal()
-
-p1 + p2  + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+covered_cobinations |> 
+  group_by(status, birth_year) |> 
+  count() |> 
+  ungroup() |> 
+  filter(!is.na(status)) |> 
+  pivot_wider(names_from = status,values_from = n) |> 
+  arrange(-birth_year) |> 
+  print(n = 40)
 ```
 
  <!--

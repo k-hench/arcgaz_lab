@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.132">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -162,12 +162,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/"><i class="bi bi-file-earmark" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/k-hench/arcgaz_gl/"><i class="bi bi-github" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -220,7 +220,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
   <li><a href="#quality-check-for-selected-samples" id="toc-quality-check-for-selected-samples" class="nav-link active" data-scroll-target="#quality-check-for-selected-samples"><span class="toc-section-number">1.1</span>  Quality Check for Selected Samples</a></li>
   <li><a href="#substitutes-for-sample-dropouts" id="toc-substitutes-for-sample-dropouts" class="nav-link" data-scroll-target="#substitutes-for-sample-dropouts"><span class="toc-section-number">2</span>  Substitutes for Sample Dropouts</a></li>
-  <li><a href="#comparison-to-biomarker-qc" id="toc-comparison-to-biomarker-qc" class="nav-link" data-scroll-target="#comparison-to-biomarker-qc"><span class="toc-section-number">3</span>  Comparison to biomarker QC</a></li>
   </ul>
 </nav>
     </div>
@@ -237,6 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -334,7 +334,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_to_upper</span>()</span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>xls_david_con <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data/lab/All_unique_notSNPped.xlsx"</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>xls_david_con <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"lab"</span>, <span class="st">"All_unique_notSNPped.xlsx"</span>)</span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>clr_classes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#FF0000"</span> <span class="ot">=</span> <span class="st">"DNA not usable, needs reextraction."</span>,</span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"#FFC000"</span> <span class="ot">=</span> <span class="st">"DNA of borderline quality - avoid if possible."</span>,</span>
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"#00B050"</span> <span class="ot">=</span> <span class="st">"DNA good, maybe re-run gel before further use. Already (planed) genotyped on SNP array."</span>,</span>
@@ -381,16 +381,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">dna_con =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(Picogreen_con),</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">as.double</span>(david_con),                  <span class="co"># incl. new concentration measurements</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">as.double</span>(Picogreen_con)),             <span class="co"># incl. original bad concentrations that were not transferred to davids file</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_wgs_nl =</span> <span class="dv">1200</span> <span class="sc">/</span> dna_con,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_wgs_nl =</span> <span class="fl">1.2</span> <span class="sc">*</span> <span class="dv">450</span> <span class="sc">/</span> dna_con,                        <span class="co"># 400ng with &gt; 2.5ng/ul of concentration.</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_SNP_nl =</span> <span class="dv">750</span> <span class="sc">/</span> dna_con,</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_total =</span> <span class="fu">replace_na</span>(vol_wgs_nl,<span class="dv">0</span>) <span class="sc">+</span> <span class="fu">replace_na</span>(vol_SNP_nl,<span class="dv">0</span>))</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># data_with_con |&gt;</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(con_inconsistent) |&gt;</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   select(PupTissueID, Picogreen_con,</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#          david_con, con_check,</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#          `Was_re-extracted`) |&gt; view()</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>con_threshold <span class="ot">&lt;-</span> <span class="dv">45</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_total =</span> <span class="fu">replace_na</span>(vol_wgs_nl,<span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>           <span class="fu">replace_na</span>(vol_SNP_nl,<span class="dv">0</span>))</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># data_with_con |&gt;</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(con_inconsistent) |&gt;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   select(PupTissueID, Picogreen_con,</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#          david_con, con_check,</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#          `Was_re-extracted`) |&gt; view()</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>con_threshold <span class="ot">&lt;-</span> <span class="dv">45</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Than we compute a weighting column based on the pico-green concentration, by replacing values below 45 as well as <code>NA</code> with random negative numbers between <code>-150</code> and <code>-100</code> (to penalize those samples in the random draw later).</p>
@@ -561,13 +562,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="quality-check-for-selected-samples" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="quality-check-for-selected-samples"><span class="header-section-number">1.1</span> Quality Check for Selected Samples</h2>
-<div id="fig-gels" class="quarto-layout-panel">
+<div id="fig-gels1" class="quarto-layout-panel">
 <figure class="figure">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-gel2" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-gel1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="../img/lab/2022-11-17-gel1.svg" class="img-fluid figure-img" data-ref-parent="fig-gels"></p>
+<p><img src="../img/lab/2022-11-17-gel1.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
 <p></p><figcaption class="figure-caption">(a) gel_1. Samples 1–13</figcaption><p></p>
 </figure>
 </div>
@@ -575,13 +576,95 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-gel2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="../img/lab/2022-11-17-gel2.svg" class="img-fluid figure-img" data-ref-parent="fig-gels"></p>
+<p><img src="../img/lab/2022-11-17-gel2.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
 <p></p><figcaption class="figure-caption">(b) gel_2. Samples 14–26</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.1: Gels from the 2022-11-17.</figcaption><p></p>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-11-24-gel1.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(c) gel_3. Samples 1–13</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-11-24-gel2.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(d) gel_4. Samples 14–26</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-11-29-gel1.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(e) gel_5. Samples 1–13</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel6" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-11-29-gel2.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(f) gel_6. Samples 14–26</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel7" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-12-02-gel1.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(g) gel_7. Samples 1–13</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel8" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-12-02-gel2.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(h) gel_8. Samples 14–26</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel9" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-12-02-gel3.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(i) gel_09. Samples 27–39</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel10" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-12-06-gel1.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(j) gel_10. Samples 1–13</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-gel11" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../img/lab/2022-12-06-gel2.svg" class="img-fluid figure-img" data-ref-parent="fig-gels1"></p>
+<p></p><figcaption class="figure-caption">(k) gel_11. Samples 14–26</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.1: Gels from the 2022-11-17 – 2022-12-06. Run parameters: 1% agarose gel, 70V, 45min.</figcaption><p></p>
 </figure>
 </div>
 </section>
@@ -673,13 +756,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(dna_con)) <span class="sc">|&gt;</span> </span>
 <span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(Picogreen_con<span class="sc">:</span>vol_total)) <span class="sc">|&gt;</span> </span>
 <span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PlateNumber, birth_year, status, priority) <span class="sc">|&gt;</span> </span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"lab"</span>, <span class="st">"samples_needing_concentration_measurements.tsv"</span>))</span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"lab"</span>, <span class="st">"pico_green"</span>, <span class="st">"samples_needing_concentration_measurements.tsv"</span>))</span>
 <span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a><span class="co"># sample_substitutes |&gt; </span></span>
 <span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a><span class="co">#   arrange(sample_nr, birth_year, status)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell">
+<div class="cell" data-figure-width="8">
 <details>
 <summary>toggle code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sample_layout <span class="ot">&lt;-</span> sample_substitutes <span class="sc">|&gt;</span> </span>
@@ -758,7 +841,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   bind_rows(mushrooms |&gt; </span></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#               dplyr::select(SampleID = sample_id,</span></span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#                  Well = pos)) |&gt; </span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#    write_tsv("~/Desktop/2022-11-23_sample_layout.tsv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   write_tsv(here("data", "lab", "pico_green", "2022-11-23_sample_layout.tsv"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -770,66 +853,487 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_prefix =</span> <span class="st">"Plate_"</span>,</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_transform =</span> as.numeric,</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">everything</span>(),</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"tissue_id"</span>)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>sample_substitutes <span class="sc">|&gt;</span> </span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PlateNumber =</span> <span class="fu">as.numeric</span>(PlateNumber)) <span class="sc">|&gt;</span> </span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(selection_david) <span class="sc">|&gt;</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sample_nr, birth_year, status) <span class="sc">|&gt;</span> </span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(<span class="fu">is.na</span>(plate_david)) <span class="sc">|&gt;</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  # group_by(birth_year, status) |&gt; </span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  # count() |&gt; </span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  # ggplot(aes(x = birth_year, y = n, color = status)) +</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  # geom_hline(yintercept = 1:4,lintype = 3) +</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  # geom_bar(stat = "identity", aes(fill = after_scale(color))) +</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  # facet_grid(status~.)</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">row_number</span>() <span class="sc">&lt;=</span> (<span class="dv">13</span> <span class="sc">*</span> <span class="dv">4</span> <span class="sc">+</span> <span class="dv">6</span>),</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>         sample_nr <span class="sc">&lt;=</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># group_by(birth_year, status) |&gt; </span></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter(sample_nr == 1) |&gt;   # (priority == min(priority)) |&gt; </span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>plate_david) <span class="sc">|&gt;</span> </span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">year =</span> <span class="st">"birth_year"</span>,</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">plate =</span> <span class="st">"PlateNumber"</span>,</span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">loc =</span> <span class="st">"PlateLocation"</span>,</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">pico_con =</span> <span class="st">"Picogreen_con"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">added =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"x"</span>)[(<span class="fu">row_number</span>() <span class="sc">&gt;</span> <span class="dv">52</span>) <span class="sc">+</span> <span class="dv">1</span>]) <span class="sc">|&gt;</span> </span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(tissue_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGP97053"</span>, <span class="st">"AGP99069"</span>, <span class="st">"AGP05161"</span>, <span class="st">"AGF94134"</span>)), <span class="co"># ! LAST ONE IS THE 1980 SAMPLE</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>          <span class="sc">!</span><span class="fu">duplicated</span>(tissue_id)             ) <span class="sc">|&gt;</span> </span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(plate, year, status) <span class="sc">|&gt;</span> </span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(selection_david <span class="sc">|&gt;</span></span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="st">"~/work/hoffman_lab/arcgaz_SPP/arcgaz_gl/data/lab/2022-11-24_samples_for_gels_p5.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"tissue_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-</section>
-<section id="comparison-to-biomarker-qc" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Comparison to biomarker QC</h1>
 <div class="cell">
 <details>
 <summary>toggle code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>biomarker_qc <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"~/work/hoffman_lab/arcgaz_SPP/lab_reports/BMK220615-AX608-QC Report/BMK_xml/SAMPLE_MX.txt"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PupTissueID =</span> <span class="fu">str_c</span>(<span class="st">"AG"</span>,  <span class="st">`</span><span class="at">Sample name</span><span class="st">`</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(data_with_con)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> biomarker_qc <span class="sc">|&gt;</span> </span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Qubit(ng/ul)</span><span class="st">`</span>, <span class="at">y =</span> Picogreen_con, <span class="at">color =</span> <span class="st">`</span><span class="at">Quality grade</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_point(size = 2) +</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="st">`</span><span class="at">Gel ID</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> scales<span class="sc">::</span><span class="fu">colour_ramp</span>(<span class="fu">c</span>(clr1,<span class="st">"gray90"</span>,<span class="st">"black"</span>))(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="at">length.out =</span> <span class="dv">4</span>))) <span class="sc">+</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span>  biomarker_qc <span class="sc">|&gt;</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Qubit(ng/ul)</span><span class="st">`</span>, <span class="at">y =</span> NanoVue_con, <span class="at">color =</span> <span class="st">`</span><span class="at">Quality grade</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_point(size = 2) +</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="st">`</span><span class="at">Gel ID</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> scales<span class="sc">::</span><span class="fu">colour_ramp</span>(<span class="fu">c</span>(clr1,<span class="st">"gray90"</span>,<span class="st">"black"</span>))(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="at">length.out =</span> <span class="dv">4</span>))) <span class="co">#+</span></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  coord_equal()</span></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2  <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sample_substitutes <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PlateNumber =</span> <span class="fu">as.numeric</span>(PlateNumber)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(selection_david) <span class="sc">|&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sample_nr, birth_year, status) <span class="sc">|&gt;</span> </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(<span class="fu">is.na</span>(plate_david)) <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  # group_by(birth_year, status) |&gt; </span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  # count() |&gt; </span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  # ggplot(aes(x = birth_year, y = n, color = status)) +</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  # geom_hline(yintercept = 1:4,lintype = 3) +</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  # geom_bar(stat = "identity", aes(fill = after_scale(color))) +</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  # facet_grid(status~.)</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">row_number</span>() <span class="sc">&lt;=</span> (<span class="dv">13</span> <span class="sc">*</span> <span class="dv">4</span> <span class="sc">+</span> <span class="dv">6</span>),</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>         sample_nr <span class="sc">&lt;=</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># group_by(birth_year, status) |&gt; </span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter(sample_nr == 1) |&gt;   # (priority == min(priority)) |&gt; </span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>plate_david) <span class="sc">|&gt;</span> </span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">year =</span> <span class="st">"birth_year"</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">plate =</span> <span class="st">"PlateNumber"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">loc =</span> <span class="st">"PlateLocation"</span>,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">pico_con =</span> <span class="st">"Picogreen_con"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">added =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"x"</span>)[(<span class="fu">row_number</span>() <span class="sc">&gt;</span> <span class="dv">52</span>) <span class="sc">+</span> <span class="dv">1</span>]) <span class="sc">|&gt;</span> </span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(tissue_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGP97053"</span>, <span class="st">"AGP99069"</span>, <span class="st">"AGP05161"</span>, <span class="st">"AGF94134"</span>)), <span class="co"># ! LAST ONE IS THE 1980 SAMPLE</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>          <span class="sc">!</span><span class="fu">duplicated</span>(tissue_id) ) <span class="sc">|&gt;</span> </span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(plate, year, status) <span class="sc">|&gt;</span> </span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(selection_david) <span class="sc">|&gt;</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"lab"</span>, <span class="st">"gels"</span>, <span class="st">"2022-11-24_samples_for_gels_px.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-figure-width="8">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>covered_cobinations <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"lab"</span>, <span class="st">"samples_for_sequencing.tsv"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(PupTissueID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AGP12304"</span>, <span class="st">"AGP13022"</span>, <span class="st">"AGP13038"</span>, <span class="st">"AGP14223"</span>, <span class="st">"AGP15169"</span>, <span class="st">"AGP15207"</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AGP15210"</span>, <span class="st">"AGP15252"</span>, <span class="st">"AGP16228"</span>, <span class="st">"AGP14186"</span>, <span class="st">"AGP14226"</span>, <span class="st">"AGP15300"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AGP15359"</span>, <span class="st">"AGP15372"</span>, <span class="st">"AGP16264"</span>, <span class="st">"AGP16267"</span>, <span class="st">"AGP16280"</span>, <span class="st">"AGP16286"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AGP16288"</span>, <span class="st">"AGF16007"</span>, <span class="st">"AGF16015"</span>, <span class="st">"AGF16024"</span>))) <span class="sc">|&gt;</span> <span class="co"># exclude extracts emptied by david </span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">needs_substitute =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(data_with_con, <span class="at">by =</span> <span class="fu">c</span>(<span class="at">PupTissueID =</span> <span class="st">"PupTissueID"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">tissue_id =</span> PupTissueID , <span class="at">birth_year =</span> PupBirthyear, status, needs_substitute) <span class="sc">|&gt;</span> </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(selection_david) <span class="sc">|&gt;</span> </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dupl =</span> <span class="fu">duplicated</span>(tissue_id)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(tissue_id),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>         <span class="fu">is.na</span>(plate_david)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(<span class="fu">str_c</span>(birth_year, status)))</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>next_samples <span class="ot">&lt;-</span> sample_substitutes <span class="sc">|&gt;</span> </span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(tissue_id <span class="sc">%in%</span> <span class="fu">read_tsv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"lab"</span>, <span class="st">"sample_dropouts.tsv"</span>))<span class="sc">$</span>PupTissueID)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(covered_cobinations <span class="sc">|&gt;</span> </span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(birth_year, status, needs_substitute)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(needs_substitute)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">read_tsv</span>(<span class="at">file =</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"lab"</span>, <span class="st">"gels"</span>, <span class="st">"2022-11-24_samples_for_gels_p5.tsv"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>              dplyr<span class="sc">::</span><span class="fu">select</span>(tissue_id) <span class="sc">|&gt;</span> </span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">already_checked =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(already_checked))  <span class="sc">|&gt;</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(data_with_con <span class="sc">|&gt;</span> <span class="fu">filter</span>(PupTissueID <span class="sc">==</span> <span class="st">"AGP00702"</span>)<span class="sc">|&gt;</span> </span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">tissue_id =</span> PupTissueID,</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>                <span class="at">uniqueID =</span> uniqueID_pup,</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>                <span class="at">birth_year =</span> PupBirthyear,</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>                status, PlateNumber, PlateLocation,</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>                Picogreen_con, david_con, dna_con,</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>                vol_wgs_nl, vol_SNP_nl, vol_total)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(birth_year, status) <span class="sc">|&gt;</span> </span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_nr =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>(),</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">n</span>(),</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>                            <span class="at">replace =</span> <span class="cn">FALSE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sample_nr, status) <span class="sc">|&gt;</span> </span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(birth_year <span class="sc">!=</span> <span class="dv">1980</span>,</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>          sample_nr <span class="sc">&lt;</span> <span class="dv">8</span>) <span class="co">#|&gt;    2022-12-02-gel1</span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># head(26)</span></span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>extra20_samples <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>( <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"lab"</span>, <span class="st">"gels"</span>, <span class="st">"samples_extra_20.tsv"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">other_data =</span> <span class="fu">str_c</span>(<span class="fu">c</span>(<span class="st">""</span>, <span class="st">"e"</span>)[epiGBS <span class="sc">+</span> <span class="dv">1</span>],</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"t"</span>)[transcriptomics <span class="sc">+</span> <span class="dv">1</span>])) <span class="sc">|&gt;</span><span class="co"># pluck("ID")</span></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">PupTissueID =</span> BAS_ID,</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>                other_data, Season) <span class="sc">|&gt;</span> </span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(data_con <span class="sc">|&gt;</span> </span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>( <span class="at">PupTissueID =</span> <span class="fu">str_remove</span>(PupTissueID, <span class="st">"[A-Z][0-9]*_"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>( <span class="sc">!</span><span class="fu">is.na</span>(PlateNumber))  <span class="sc">|&gt;</span> </span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>( <span class="sc">!</span><span class="fu">duplicated</span>(PupTissueID, <span class="at">from.last =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vol_wgs_nl =</span> <span class="fl">1.2</span> <span class="sc">*</span> <span class="dv">450</span> <span class="sc">/</span> NanoVue_con,                        <span class="co"># 400ng with &gt; 2.5ng/ul of concentration.</span></span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_SNP_nl =</span> <span class="dv">750</span> <span class="sc">/</span> NanoVue_con,</span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a>         <span class="at">vol_total =</span> <span class="fu">replace_na</span>(vol_wgs_nl,<span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>           <span class="fu">replace_na</span>(vol_SNP_nl, <span class="dv">0</span>),</span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>         <span class="at">uniqueID =</span> <span class="st">''</span> ) <span class="sc">|&gt;</span> </span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">tissue_id =</span> PupTissueID,</span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a>                uniqueID,</span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a>                <span class="at">birth_year =</span> Season,</span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a>                <span class="at">status =</span> other_data,</span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a>                PlateNumber,</span>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a>                <span class="fu">starts_with</span>(<span class="st">"vol"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-12-01 gel samples</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># next_samples |&gt; </span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   dplyr::select(tissue_id, uniqueID, birth_year, status, PlateNumber,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                 starts_with("vol")) |&gt; </span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(dataset = 1L) |&gt; </span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   bind_rows(extra20_samples |&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#               mutate(dataset = 2L)) |&gt; </span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(PlateNumber = as.numeric(PlateNumber)) |&gt; </span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   arrange(dataset, PlateNumber, tissue_id) |&gt;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(sn = row_number(),</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#          pos = (sn - 1) %% 13 + 1) |&gt; </span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   dplyr::select(sn,pos, everything()) |&gt; </span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   rename(plate = "PlateNumber",</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#          v_wgs = "vol_wgs_nl",</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#          v_SNP = "vol_SNP_nl",</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#          v_total = "vol_total") |&gt;</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   left_join(read_csv("~/work/hoffman_lab/lab/rebecca_n/Mum-Pup_BASid.csv"), </span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#             by = c(tissue_id = "BAS_ID")) |&gt; </span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(uniqueID = if_else(uniqueID == "",ID,uniqueID)) |&gt; </span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   dplyr::select(-ID) |&gt; </span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   write_tsv("data/lab/gels/2022-12-01_samples_for_gels.tsv")</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-12-02 gel samples</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>bouvetoya_samples <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="fu">here</span>(<span class="st">"data"</span>,<span class="st">"lab"</span> ,<span class="st">"Agaz_DNA_extraction_info.xlsx"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SampleID =</span> SampleID <span class="sc">|&gt;</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_replace</span>(<span class="st">" "</span>, <span class="st">"-"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_replace</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">("</span>, <span class="st">"-"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_remove</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(SampleID, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"sample_id_pop"</span>, <span class="st">"pop"</span>, <span class="st">"comment"</span>),</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">sep =</span> <span class="st">"-"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pop =</span> <span class="fu">str_remove</span>(pop, <span class="st">" *$"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_remove</span>(<span class="st">"^ *"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_replace</span>(<span class="st">"Bovetoya"</span>,<span class="st">"Bouvetoya"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pop <span class="sc">==</span> <span class="st">"Bouvetoya"</span>,</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>         NanoVue_con) <span class="sc">|&gt;</span> </span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PlateNumber =</span> <span class="fu">as.numeric</span>(PlateNumber))</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>next_samples <span class="sc">|&gt;</span> </span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(tissue_id, uniqueID, birth_year, status, PlateNumber,</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>                <span class="fu">starts_with</span>(<span class="st">"vol"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PlateNumber =</span> <span class="fu">as.numeric</span>(PlateNumber)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PlateNumber, tissue_id) <span class="sc">|&gt;</span> </span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(bouvetoya_samples <span class="sc">|&gt;</span> </span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>              dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">tissue_id =</span> sample_id_pop,</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>                            <span class="at">status =</span> pop, PlateNumber))   <span class="sc">|&gt;</span></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sn =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>         <span class="at">pos =</span> (sn <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%%</span> <span class="dv">13</span> <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(sn,pos, <span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">plate =</span> <span class="st">"PlateNumber"</span>,</span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>         <span class="at">v_wgs =</span> <span class="st">"vol_wgs_nl"</span>,</span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>         <span class="at">v_SNP =</span> <span class="st">"vol_SNP_nl"</span>,</span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a>         <span class="at">v_total =</span> <span class="st">"vol_total"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="st">"data/lab/gels/2022-12-02_samples_for_gels_b.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Overview of the samples selected for sequencing</p>
+<div class="cell" data-figure-width="8">
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>covered_cobinations <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(status)) <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> birth_year, <span class="at">color =</span> status)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"count"</span>, <span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">after_scale</span>(color))) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_bar(data = next_samples |&gt; filter(!is.na(status)), </span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#          stat = "count", aes(y = ..count..),  fill = "transparent") +</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> clrs, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(status<span class="sc">~</span>.) <span class="sc">+</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="01_sample_selection_files/figure-html/unnamed-chunk-17-1.svg" class="img-fluid" width="672"></p>
+<p><img src="01_sample_selection_files/figure-html/unnamed-chunk-20-1.svg" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>toggle code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>covered_cobinations <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(status, birth_year) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(status)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> status,<span class="at">values_from =</span> n) <span class="sc">|&gt;</span> </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>birth_year) <span class="sc">|&gt;</span> </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="dv">40</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; # A tibble: 39 × 4
+#&gt;    birth_year BeachDead NonRecruited Recruited
+#&gt;         &lt;dbl&gt;     &lt;int&gt;        &lt;int&gt;     &lt;int&gt;
+#&gt;  1       2019         1            1        NA
+#&gt;  2       2018         1            1        NA
+#&gt;  3       2017         1            1         1
+#&gt;  4       2016         1            1         1
+#&gt;  5       2015         1            1        NA
+#&gt;  6       2014         1            1        NA
+#&gt;  7       2013         1            1         1
+#&gt;  8       2012         1            1         1
+#&gt;  9       2011         1            1         1
+#&gt; 10       2010         1            1         1
+#&gt; 11       2009         1            1         1
+#&gt; 12       2008         1            1         1
+#&gt; 13       2007         1            1         1
+#&gt; 14       2006         1            1         1
+#&gt; 15       2005         1            1         1
+#&gt; 16       2004         1            1         1
+#&gt; 17       2003         1            1         1
+#&gt; 18       2002         1           NA         1
+#&gt; 19       2001         1            1         1
+#&gt; 20       2000         1            1         1
+#&gt; 21       1999         1            1         1
+#&gt; 22       1998         1           NA         1
+#&gt; 23       1997         1            1         1
+#&gt; 24       1996         1            1         1
+#&gt; 25       1995        NA           NA         1
+#&gt; 26       1994        NA           NA         1
+#&gt; 27       1993        NA           NA         1
+#&gt; 28       1992        NA           NA         1
+#&gt; 29       1991        NA           NA         1
+#&gt; 30       1990        NA           NA         1
+#&gt; 31       1989        NA           NA         1
+#&gt; 32       1988        NA           NA         1
+#&gt; 33       1987        NA           NA         1
+#&gt; 34       1986        NA           NA         1
+#&gt; 35       1985        NA           NA         1
+#&gt; 36       1984        NA           NA         1
+#&gt; 37       1983        NA           NA         1
+#&gt; 38       1982        NA           NA         1
+#&gt; 39       1981        NA           NA         1</code></pre>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: right;">birth_year</th>
+<th style="text-align: right;">BeachDead</th>
+<th style="text-align: right;">NonRecruited</th>
+<th style="text-align: right;">Recruited</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2018</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2016</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2014</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2012</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2011</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2008</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2007</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2006</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1998</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1997</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1996</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1995</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1994</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1993</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1992</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1991</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1990</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1989</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1988</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1987</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1986</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1985</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1984</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1983</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1982</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1981</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p><!--
@@ -924,7 +1428,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -960,24 +1481,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

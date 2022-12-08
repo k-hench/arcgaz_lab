@@ -11,14 +11,14 @@
     "href": "qmd/01_sample_selection.html",
     "title": "1  Sample selection",
     "section": "",
-    "text": "Samples with issues, to avoid for sample selection.\nRead in Annekes cleaned sample list. Then, give an overview of the available samples over the years, stratified by recruitment success and SNP genotype availability.\nTo be able to include information about the available DNA extractions into the sample selection, we read in the tissue sample specific concentrations and merge them to the data.\nMeanwhile, the concentration of more samples has been measured:\nThan we compute a weighting column based on the pico-green concentration, by replacing values below 45 as well as NA with random negative numbers between -150 and -100 (to penalize those samples in the random draw later).\nFor each year, one sample is randomly chosen per recruitment status. Try to use only SNPed samples, if necessary fill up with un-SNPed samples where possible (if only one sample is available, pick this one).\nLooking up available alternative tissue samples for the selected individuals.\nSummarize the sample selection by strata (year, recruitment success, SNP availability).\nFormat and export the sample selection to tsv file."
+    "text": "2 Substitutes for Sample Dropouts\nGrab five potential substitutes for each factor combination, excluding those selected in the initial sample selection. We pick up a step prior to the initial sample selection to include new concentration measurements (dna_con instead of Picogreen_con).\nWe only need substitutes for combinations of birth_year and status, for which we don’t have approved samples yet. To figure out which samples potentially still need substitutes, we lead info about the\nOverview of the samples selected for sequencing"
   },
   {
     "objectID": "qmd/01_sample_selection.html#quality-check-for-selected-samples",
     "href": "qmd/01_sample_selection.html#quality-check-for-selected-samples",
     "title": "1  Sample selection",
     "section": "1.1 Quality Check for Selected Samples",
-    "text": "1.1 Quality Check for Selected Samples\n\n\n\n\n\n\n\n(a) gel_1. Samples 1–13\n\n\n\n\n\n\n\n(b) gel_2. Samples 14–26\n\n\n\n\nFigure 1.1: Gels from the 2022-11-17."
+    "text": "1.1 Quality Check for Selected Samples\n\n\n\n\n\n\n\n(a) gel_1. Samples 1–13\n\n\n\n\n\n\n\n(b) gel_2. Samples 14–26\n\n\n\n\n\n\n\n\n\n(c) gel_3. Samples 1–13\n\n\n\n\n\n\n\n(d) gel_4. Samples 14–26\n\n\n\n\n\n\n\n\n\n(e) gel_5. Samples 1–13\n\n\n\n\n\n\n\n(f) gel_6. Samples 14–26\n\n\n\n\n\n\n\n\n\n(g) gel_7. Samples 1–13\n\n\n\n\n\n\n\n(h) gel_8. Samples 14–26\n\n\n\n\n\n\n\n\n\n(i) gel_09. Samples 27–39\n\n\n\n\n\n\n\n(j) gel_10. Samples 1–13\n\n\n\n\n\n\n\n\n\n(k) gel_11. Samples 14–26\n\n\n\n\nFigure 1.1: Gels from the 2022-11-17 – 2022-12-06. Run parameters: 1% agarose gel, 70V, 45min."
   },
   {
     "objectID": "qmd/01_sample_selection.html#substitutes-for-sample-dropouts",
