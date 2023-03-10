@@ -1,0 +1,24 @@
+'''
+snakemake --use-conda --cores 1 -R
+snakemake --dag | dot -Tpdf > dag.pdf
+'''
+import os
+import pandas as pd
+
+configfile: "workflow/config.yml"
+
+QUERY_GENOMES = config["query_genomes"][:2]
+
+rule all:
+    params:
+      wd = os.getcwd()
+    message:
+     '''
+     This pipeline is meant to be run in increments.
+     Users can run the sub-workflow `numbering` (`numbers.smk`),
+     the sub-workflow `lettering` (`letters.smk`),
+     or the complete pipeline (`rule: complete`).
+     '''
+
+
+include: "./rules/initial_dl.smk"

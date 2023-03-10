@@ -38,7 +38,6 @@ troubblemakers <- c(
 )
 ```
 
-
 Read in Annekes cleaned sample list.
 Then, give an overview of the available samples over the years, stratified by recruitment success and SNP genotype availability.
 
@@ -145,6 +144,8 @@ data_david_substitutes <- read_xlsx(here("data", "lab", "Kosmas_samples.xlsx")) 
 
 
 ```{r}
+dna_minimum <- 400
+
 data_with_con <- data |> 
   mutate(fitness_class = if_else(status %in% c("BeachDead", "NonRecruited"),
                                  "NonRecruited", status)) |> 
@@ -159,7 +160,7 @@ data_with_con <- data |>
          dna_con = if_else(is.na(Picogreen_con),
                            as.double(david_con),                  # incl. new concentration measurements
                            as.double(Picogreen_con)),             # incl. original bad concentrations that were not transferred to davids file
-         vol_wgs_nl = 1.2 * 450 / dna_con,                        # 400ng with > 2.5ng/ul of concentration.
+         vol_wgs_nl = 1.2 * dna_minimum / dna_con,                        # 400ng with > 2.5ng/ul of concentration.
          vol_SNP_nl = 750 / dna_con,
          vol_total = replace_na(vol_wgs_nl,0) +
            replace_na(vol_SNP_nl,0))
@@ -574,13 +575,16 @@ sample_substitutes |>
 #| figure-width: 8
 #| fig-height: 4
 covered_cobinations <- read_tsv(here("data", "lab", "samples_for_sequencing.tsv")) |> 
-  filter(!(PupTissueID %in% c("AGP12304", "AGP13022", "AGP13038", "AGP14223", "AGP15169", "AGP15207",
-  "AGP15210", "AGP15252", "AGP16228", "AGP14186", "AGP14226", "AGP15300",
-  "AGP15359", "AGP15372", "AGP16264", "AGP16267", "AGP16280", "AGP16286",
-  "AGP16288", "AGF16007", "AGF16015", "AGF16024"))) |> # exclude extracts emptied by david 
+  filter(!(PupTissueID %in% c("AGP12304", "AGP13022", "AGP13038", "AGP14223",
+                              "AGP15169", "AGP15207", "AGP15210", "AGP15252",
+                              "AGP16228", "AGP14186", "AGP14226", "AGP15300",
+                              "AGP15359", "AGP15372", "AGP16264", "AGP16267",
+                              "AGP16280", "AGP16286", "AGP16288", "AGF16007",
+                              "AGF16015", "AGF16024"))) |> # exclude extracts emptied by david 
   mutate(needs_substitute = FALSE) |> 
   left_join(data_with_con, by = c(PupTissueID = "PupTissueID")) |> 
-  dplyr::select(tissue_id = PupTissueID , birth_year = PupBirthyear, status, needs_substitute) |> 
+  dplyr::select(tissue_id = PupTissueID , birth_year = PupBirthyear,
+                status, needs_substitute, vol_wgs_nl, vol_total) |> 
   left_join(selection_david) |> 
   mutate(dupl = duplicated(tissue_id)) |> 
   filter(!duplicated(tissue_id),
@@ -617,26 +621,28 @@ extra20_samples <- read_tsv( here("data", "lab", "gels", "samples_extra_20.tsv")
   mutate(other_data = str_c(c("", "e")[epiGBS + 1],
                             c("", "t")[transcriptomics + 1])) |># pluck("ID")
   dplyr::select(PupTissueID = BAS_ID,
-                other_data, Season) |> 
+                other_data, Season,
+                org_id = ID) |> 
   left_join(data_con |> 
               mutate( PupTissueID = str_remove(PupTissueID, "[A-Z][0-9]*_")) |> 
               filter( !is.na(PlateNumber))  |> 
               filter( !duplicated(PupTissueID, from.last = TRUE))
   ) |> 
-  mutate(vol_wgs_nl = 1.2 * 450 / NanoVue_con,                        # 400ng with > 2.5ng/ul of concentration.
+  mutate(vol_wgs_nl = 1.2 * dna_minimum / NanoVue_con,                        # 400ng with > 2.5ng/ul of concentration.
          vol_SNP_nl = 750 / NanoVue_con,
          vol_total = replace_na(vol_wgs_nl,0) +
            replace_na(vol_SNP_nl, 0),
          uniqueID = '' ) |> 
   dplyr::select(tissue_id = PupTissueID,
                 uniqueID,
+                org_id,
                 birth_year = Season,
                 status = other_data,
                 PlateNumber,
                 starts_with("vol"))
 ```
 
-```{r, eval = FALSE}
+```{r}
 # 2022-12-01 gel samples
 # next_samples |> 
 #   dplyr::select(tissue_id, uniqueID, birth_year, status, PlateNumber,
@@ -670,19 +676,22 @@ bouvetoya_samples <- read_xlsx(here("data","lab" ,"Agaz_DNA_extraction_info.xlsx
   mutate(pop = str_remove(pop, " *$") |> 
            str_remove("^ *") |> 
            str_replace("Bovetoya","Bouvetoya")) |> 
-  filter(pop == "Bouvetoya",
+  filter(pop %in% c("Bouvetoya"),
          NanoVue_con) |> 
-  slice_sample(n = 13) |> 
+  slice_sample(n = 16) |> 
   mutate(PlateNumber = as.numeric(PlateNumber))
+```
 
+
+```{r, eval = FALSE}
 next_samples |> 
   dplyr::select(tissue_id, uniqueID, birth_year, status, PlateNumber,
                 starts_with("vol")) |> 
   mutate(PlateNumber = as.numeric(PlateNumber)) |> 
-  arrange(PlateNumber, tissue_id) |> 
   bind_rows(bouvetoya_samples |> 
               dplyr::select(tissue_id = sample_id_pop,
                             status = pop, PlateNumber))   |>
+  arrange(PlateNumber, tissue_id) |> 
   mutate(sn = row_number(),
          pos = (sn - 1) %% 13 + 1) |> 
   dplyr::select(sn,pos, everything()) |>
@@ -690,7 +699,7 @@ next_samples |>
          v_wgs = "vol_wgs_nl",
          v_SNP = "vol_SNP_nl",
          v_total = "vol_total") |>
-  write_tsv("data/lab/gels/2022-12-02_samples_for_gels_b.tsv")
+  write_tsv("data/lab/gels/2022-12-08_samples_for_gels.tsv")
 ```
 
 Overview of the samples selected for sequencing
@@ -698,7 +707,7 @@ Overview of the samples selected for sequencing
 ```{r}
 #| figure-width: 8
 #| fig-height: 3.75
-covered_cobinations |> 
+covered_cobinations |>
   filter(!is.na(status)) |>
   ggplot(aes(x = birth_year, color = status)) +
   geom_bar(stat = "count", aes(fill = after_scale(color))) +
@@ -719,6 +728,162 @@ covered_cobinations |>
   arrange(-birth_year) |> 
   print(n = 40)
 ```
+
+```{r}
+temporal_preselection <- read_tsv(here("data", "lab", "samples_for_sequencing.tsv")) |> 
+  filter(!(PupTissueID %in% c("AGP12304", "AGP13022", "AGP13038", "AGP14223", "AGP15169", "AGP15207",
+  "AGP15210", "AGP15252", "AGP16228", "AGP14186", "AGP14226", "AGP15300",
+  "AGP15359", "AGP15372", "AGP16264", "AGP16267", "AGP16280", "AGP16286",
+  "AGP16288", "AGF16007", "AGF16015", "AGF16024"))) |> # exclude extracts emptied by david 
+  mutate(needs_substitute = FALSE) |> 
+  left_join(data_with_con, by = c(PupTissueID = "PupTissueID")) |> 
+  dplyr::select(unique_id = uniqueID,
+                tissue_id = PupTissueID ,
+                year = PupBirthyear,
+                status, 
+                dna_con,
+                vol_wgs = vol_wgs_nl,
+                vol_total) |> 
+  left_join(selection_david) |> 
+  mutate(dupl = duplicated(tissue_id)) |> 
+  filter(!duplicated(tissue_id),
+         is.na(plate_david)) |> 
+  left_join(extra20_samples |> dplyr::select(tissue_id, stat = status)) |> 
+  mutate(status = if_else(!is.na(stat), stat, status)) |> 
+  dplyr::select(-stat)
+
+rna_preselection <- extra20_samples |> 
+  dplyr::select(unique_id = org_id,
+                tissue_id,
+                year = birth_year,
+                status, 
+                vol_wgs = vol_wgs_nl,
+                vol_total)
+
+bouvetoya_preselection <- bouvetoya_samples |> 
+  dplyr::select(unique_id = SampleID,
+                tissue_id = sample_id_pop,
+                status = pop) |> 
+  mutate(status = str_to_lower(status))
+
+combined_preselection <- temporal_preselection |> 
+  # bind_rows(rna_preselection) |> 
+  bind_rows(bouvetoya_preselection) |>
+  filter(!duplicated(tissue_id, fromLast = TRUE)) |> 
+  mutate(status = replace_na(status, "bouvetoya")) |> 
+  left_join(read_tsv(here("data", "lab", "pico_green",
+                          "2022-12-08_sample_layout_vol.tsv")) |>
+              dplyr::select(tissue_id, 
+                       dna_conc_ng_mul,     
+                vol_wgs_new = vol_wgs_nl,
+                vol_total_new = vol_total)) |> 
+  mutate(dna_con = if_else(is.na(dna_con), dna_conc_ng_mul, dna_con),
+         vol_wgs = if_else(is.na(vol_wgs), vol_wgs_new, vol_wgs),
+         vol_total = if_else(is.na(vol_total), vol_total_new, vol_total),
+         set = if_else(status == "bouvetoya",
+                       "spatial",
+                       if_else(status %in% c("e", "t", "et"),
+                               "rna", "temporal")) |> 
+           factor(levels = c("temporal", "spatial", "rna"))) |> 
+  dplyr::select(unique_id:vol_total,set)
+
+combined_preselection |> 
+  group_by( set, year, status ) |> 
+  nest() |>
+  ungroup() |> 
+  mutate(level = row_number(),
+         n = map_dbl(data, nrow)) |> 
+  arrange(set, -year) |>
+    unnest(data) |>
+  dplyr::select(tissue_id, unique_id, everything()) |>
+  filter(!is.na(vol_wgs)) |> 
+  mutate(across(c(dna_con, vol_wgs, vol_total ),
+                .fns = \(x){sprintf(x, fmt =  "%.1f")})) |> 
+  write_tsv(here("data", "lab", "2022-12-12_sample_preselection.tsv"))
+```
+
+```{r}
+samples_pick <- read_tsv(here("data", "lab", "2022-12-12_sample_preselection_manual_pick.tsv"))
+
+samples_pick |> 
+  filter(set == "temporal",
+         !redundant) |>
+  ggplot(aes(x = year, color = status)) +
+  geom_bar(stat = "count",aes(group = tissue_id)) +
+  scale_color_manual(values = clrs, guide = "none") +
+  facet_grid(status~.) +
+  theme(axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank())
+
+already_sent <- read_tsv(here("data", "lab", "samples_for_sequencing.tsv")) |> 
+  filter(lab_qc == "david_lab") |> 
+  pluck("PupTissueID")
+
+lab_batch <- read_tsv(here("data", "lab", "samples_for_sequencing.tsv")) |> 
+  dplyr::select(tissue_id = PupTissueID,
+                lab_qc) |> 
+  mutate(lab_qc = if_else(tissue_id %in% read_tsv(
+    here("data", "lab", "pico_green", "2022-12-08_sample_layout.tsv"))$tissue_id,
+    "pico", lab_qc))
+
+samples_box <- samples_pick |> 
+  filter(!redundant,
+         !(tissue_id %in% already_sent)) |> 
+  mutate(set = factor(set, levels = c("temporal", "rna", "spatial"))) |> 
+  arrange(set) |> 
+  mutate(box_idx = (row_number()-1) %/% 81 + 1,
+         sample_idx = (row_number()-1) %% 81 + 1,
+         box_row_idx =  (sample_idx - 1) %/% 9 + 1,
+         box_col_idx = (sample_idx - 1) %% 9 + 1,
+         box_col_lab = LETTERS[box_col_idx],
+         box_pos = str_c(box_col_lab, box_row_idx),
+         label = tissue_id |> 
+           str_remove("AG") |> 
+           str_replace("^([0-9]{1})(.*)", "B\\1\\2")|> 
+           str_replace("(.{3})(.{1,4})(.*)", "\\1<br>\\2<br>\\3") |> 
+           str_remove("<br>$")) |> 
+  left_join(lab_batch) |> 
+  mutate(lab_qc = replace_na(lab_qc, "pico"),
+         vol_400 = (1.2 * dna_minimum / dna_con) |> sprintf(fmt = "%.1f"))
+
+# samples_box |> write_tsv("data/lab/2022-12-13_sample_box_pos_dna400.tsv")
+fnt_sans<- "Arial"
+samples_box |>
+  filter(sample_idx <= 75 & box_idx == 1 ) |> 
+  mutate(label = if_else(label == "PC1<br>9006", "PC1<br>8007", label)) |> 
+  ggplot(aes(x = box_col_idx, y = -box_row_idx)) +
+  geom_linerange(inherit.aes = FALSE,
+                 data = tibble(x =  (0:9)+.5),
+                 aes(x = x, ymin = -9.5, ymax = -0.5),
+                 size = .3, color = "gray60")+
+  geom_linerange(inherit.aes = FALSE,
+                 data = tibble(x = (0:9)+.5),
+                 aes(y = -x, xmin = 0.5, xmax = 9.5),
+                 size = .3, color = "gray60")+
+  geom_text(aes(x = box_col_idx + .33, y = -box_row_idx - .33, label = sample_idx),
+                        size = 3,
+                        family = fnt_sans, color = "gray50") +
+  ggtext::geom_richtext(aes(x = box_col_idx -0, y = -box_row_idx + .35, label = label),
+                        size = 4,
+                        fill = NA, label.color = NA, # remove background and outline
+                        label.padding = grid::unit(rep(0, 4), "pt"),
+                        family = fnt_sans, vjust = .9, hjust = .5) +
+  facet_wrap(box_idx ~ .) +
+  scale_x_continuous(limits = c(.4,9.6),
+                     breaks = 1:9,
+                     labels = LETTERS[1:9],
+                     position = "top") +
+  scale_y_continuous(breaks = -1:-9, labels = 1:9) +
+  coord_equal(expand = 0) +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_text(family = fnt_serif),
+        strip.text = element_blank(),
+        axis.title = element_blank())
+
+ggsave("~/Desktop/box.png", width = 5, height = 5, bg = "white")
+```
+
 
  <!--
 Glimpse at how the selected samples compare in terms of pico green concentration with the overall concentration distribution.

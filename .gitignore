@@ -6,6 +6,8 @@ data/*
 !data/lab/
 data/lab/*
 !data/lab/samples_temporal_initial_pick.tsv
+!data/carnivora_list.nwk
+!data/carnivora_ref_genomes.tsv
 
 # exclude quarto compilation side-products but track reports
 qmd/*
@@ -25,3 +27,5 @@ results/*
 singularity/*.sif
 
 /.quarto/
+
+text
