@@ -1,7 +1,8 @@
 """
+snakemake -n -R ncbi_download
+
 snakemake --jobs 10 \
   --latency-wait 30 \
-  --use-singularity \
   --use-conda \
   -p \
   --default-resources mem_mb=25600 \
@@ -18,7 +19,9 @@ snakemake --jobs 10 \
 """
 
 rule ncbi_download:
-    input: 'img/genomes_n50.svg'
+    input: 
+      'img/genomes_n50.svg',
+      expand("results/masking/{spec}_mask_check.tsv", spec = QUERY_GENOMES)
 
 checkpoint species_list:
     output: "results/carnivora_genome_and_timetree.tsv"
@@ -27,7 +30,7 @@ checkpoint species_list:
     shell: 'Rscript R/compile_species_list.R 2> {log} 1> {log}'
 
 def get_accession(wildcards, what):
-    accessions = pd.read_table('results/carnivora_genome_and_timetree.tsv').set_index("spec", drop = False)
+    accessions = pd.read_table('data/carnivora_genome_and_timetree.tsv').set_index("spec", drop = False)
     if what == 'name':
         return accessions.loc[wildcards.spec, 'organism_name']
     elif what == 'accession':

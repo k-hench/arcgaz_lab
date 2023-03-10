@@ -7,7 +7,7 @@ import pandas as pd
 
 configfile: "workflow/config.yml"
 
-QUERY_GENOMES = config["query_genomes"][:2]
+QUERY_GENOMES = config["query_genomes"]
 
 rule all:
     params:

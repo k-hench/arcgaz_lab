@@ -58,4 +58,4 @@ data_tree |>
   filter(genome_alternative == 1, `Organism Name` != "Arctocephalus_gazella") |>
   set_names(nm = function(str){str_to_lower(str) |> str_replace_all(" ", "_")}) |>
   dplyr::select(spec, everything()) |> 
-  write_tsv("results/carnivora_genome_and_timetree.tsv")
+  write_tsv("data/carnivora_genome_and_timetree.tsv")
