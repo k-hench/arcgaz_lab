@@ -22,6 +22,7 @@ snakemake --jobs 10 \
 snakemake --cores 6 \
   --latency-wait 30 \
   --use-conda \
+  --use-singularity \
   -p \
   -R ncbi_download && mv job.* logs/
 """
@@ -116,8 +117,6 @@ rule check_if_masked:
       "map_align"
     shell:
       """
-      mkdir -p results/masking/
-      
       # check if grep fails (no match)
       zgrep -v "^>" {input} | grep -q '[atgc]' || GREPERR=$? 
       echo "error code from grep: "$GREPERR
@@ -134,6 +133,7 @@ rule stat_plots:
       stats = expand("results/genome_stats/{spec}.tsv", spec = QUERY_GENOMES),
       genomes = expand("results/genomes/{spec}/{spec}_org.fa.gz", spec = QUERY_GENOMES)
     output: "img/genomes_n50.svg"
+    container: "docker://khench/r_elephant_seal:v0.4"
     log:
       "logs/r_genome_stats.log"
     shell:
