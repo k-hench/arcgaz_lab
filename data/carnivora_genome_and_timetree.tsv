@@ -14,7 +14,7 @@ eumjub	eumetopias_jubatus	GCF_004028035.1	2019-01-15	refseq	outgroup	1	eumetopia
 felcat	felis_catus	GCF_018350175.1	2021-05-13	refseq	other	1	felis_catus_1
 felcha	felis_chaus	GCA_019924945.1	2021-09-14	genbank	other	1	felis_chaus_1
 felnig	felis_nigripes	GCA_028533295.1	2023-02-09	genbank	other	1	felis_nigripes_1
-halgry	halichoerus_grypus	GCA_012393455.1	2020-04-16	genbank	other	1	halichoerus_grypus_1
+halgry	halichoerus_grypus	GCF_012393455.1	2020-04-15	refseq	other	1	halichoerus_grypus_1
 helpar	helogale_parvula	GCA_004023845.1	2019-01-15	genbank	other	1	helogale_parvula_1
 hyahya	hyaena_hyaena	GCF_003009895.1	2018-03-19	refseq	other	1	hyaena_hyaena_1
 leogeo	leopardus_geoffroyi	GCF_018350155.1	2021-05-13	refseq	other	1	leopardus_geoffroyi_1
@@ -26,9 +26,9 @@ lyncan	lynx_canadensis	GCF_007474595.2	2020-07-14	refseq	other	1	lynx_canadensis
 lynpar	lynx_pardinus	GCA_900661375.1	2019-03-28	genbank	other	1	lynx_pardinus_1
 lynruf	lynx_rufus	GCF_022079265.1	2022-02-08	refseq	other	1	lynx_rufus_1
 marzib	martes_zibellina	GCA_012583365.1	2020-04-20	genbank	other	1	martes_zibellina_1
-melmel	meles_meles	GCA_922984935.2	2022-03-23	genbank	other	1	meles_meles_1
+melmel	meles_meles	GCF_922984935.1	2021-12-19	refseq	other	1	meles_meles_1
 melcap	mellivora_capensis	GCA_004024625.1	2019-01-15	genbank	other	1	mellivora_capensis_1
-mirang	mirounga_angustirostris	GCA_021288785.3	2022-12-21	genbank	other	1	mirounga_angustirostris_1
+mirang	mirounga_angustirostris	GCF_021288785.1	2021-12-26	refseq	other	1	mirounga_angustirostris_1
 mirleo	mirounga_leonina	GCF_011800145.1	2020-03-31	refseq	other	1	mirounga_leonina_1
 munmun	mungos_mungo	GCA_004023785.1	2019-01-15	genbank	other	1	mungos_mungo_1
 muserm	mustela_erminea	GCF_009829155.1	2020-01-03	refseq	other	1	mustela_erminea_1
@@ -60,7 +60,7 @@ taxtax	taxidea_taxus	GCA_003697995.1	2018-10-30	genbank	other	1	taxidea_taxus_1
 treorn	tremarctos_ornatus	GCA_028551375.1	2023-02-09	genbank	other	1	tremarctos_ornatus_1
 ursame	ursus_americanus	GCF_020975775.1	2021-11-24	refseq	other	1	ursus_americanus_1
 ursarc	ursus_arctos	GCF_023065955.1	2022-04-20	refseq	other	1	ursus_arctos_1
-ursmar	ursus_maritimus	GCA_017311325.1	2021-03-10	genbank	other	1	ursus_maritimus_1
+ursmar	ursus_maritimus	GCF_017311325.1	2021-03-09	refseq	other	1	ursus_maritimus_1
 ursthi	ursus_thibetanus	GCA_009660055.1	2019-11-13	genbank	other	1	ursus_thibetanus_1
 vulfer	vulpes_ferrilata	GCA_024500485.1	2022-08-01	genbank	other	1	vulpes_ferrilata_1
 vullag	vulpes_lagopus	GCF_018345385.1	2021-05-12	refseq	other	1	vulpes_lagopus_1

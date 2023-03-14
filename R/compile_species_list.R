@@ -12,9 +12,9 @@ data <- read_tsv("data/carnivora_ref_genomes.tsv") |>
            str_replace("Ursus thibetanus thibetanus", "Ursus thibetanus"),
          repo = c(GCF = "refseq", GCA = "genbank")[str_sub(`Assembly Accession`,1,3)] |> 
            factor(levels = c("refseq", "genbank"))) |>
-  arrange(`Organism Name`, 
-          -as.numeric(`Assembly Submission Date`),
-          as.numeric(repo))
+  arrange(`Organism Name`,
+          as.numeric(repo), 
+          -as.numeric(`Assembly Submission Date`))
 #  filter(!duplicated(`Organism Name`, fromLast = TRUE))
 tree <- read.tree("data/carnivora_list.nwk")
 

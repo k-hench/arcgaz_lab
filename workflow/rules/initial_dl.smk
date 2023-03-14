@@ -1,6 +1,7 @@
 """
 snakemake -n -R ncbi_download
 
+# batch-job submission (offline)
 snakemake --jobs 10 \
   --latency-wait 30 \
   --use-conda \
@@ -16,12 +17,19 @@ snakemake --jobs 10 \
       -l vf={resources.mem_mb}' \
       --jn job.{name}.{jobid}.sh \
       -R ncbi_download && mv job.* logs/
+
+# local submission
+snakemake --cores 6 \
+  --latency-wait 30 \
+  --use-conda \
+  -p \
+  -R ncbi_download && mv job.* logs/
 """
 
 rule ncbi_download:
     input: 
       'img/genomes_n50.svg',
-      expand("results/masking/{spec}_mask_check.tsv", spec = QUERY_GENOMES)
+      expand("results/mask_check/{spec}_mask_check.tsv", spec = QUERY_GENOMES)
 
 checkpoint species_list:
     output: "results/carnivora_genome_and_timetree.tsv"
@@ -101,7 +109,7 @@ rule repack_genome:
 
 rule check_if_masked:
     input: 'results/genomes/{spec}/{spec}_org.fa.gz'
-    output: 'results/masking/{spec}_mask_check.tsv'
+    output: 'results/mask_check/{spec}_mask_check.tsv'
     log:
       "logs/mask_check/mask_check_{spec}.log"
     conda:
