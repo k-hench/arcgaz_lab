@@ -29,7 +29,7 @@ snakemake --cores 6 \
 
 rule ncbi_download:
     input: 
-      'img/genomes_n50.svg',
+      'img/genomes_n50.pdf',
       expand("results/mask_check/{spec}_mask_check.tsv", spec = QUERY_GENOMES)
 
 checkpoint species_list:
@@ -132,7 +132,7 @@ rule stat_plots:
     input: 
       stats = expand("results/genome_stats/{spec}.tsv", spec = QUERY_GENOMES),
       genomes = expand("results/genomes/{spec}/{spec}_org.fa.gz", spec = QUERY_GENOMES)
-    output: "img/genomes_n50.svg"
+    output: "img/genomes_n50.pdf"
     container: "docker://khench/r_elephant_seal:v0.4"
     log:
       "logs/r_genome_stats.log"
